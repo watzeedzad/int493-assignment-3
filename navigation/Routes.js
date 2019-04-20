@@ -18,10 +18,10 @@ class Routes extends Component {
     return (
       <Router>
         <Scene key="root">
-          <Scene key="Login" component={LoginPage} initial />
+          <Scene key="Login" component={LoginPage} />
           <Scene key="Register" component={RegisterPage} />
           <Scene key="EditUser" component={EditUserPage} />
-          <Scene key="Home" component={HomePage} />
+          <Scene key="Home" component={HomePage} initial />
           <Scene key="Restaurant" component={RestaurantPage} />
           <Scene key="RestaurantDetail" component={RestaurantDetailPage} />
           <Scene key="AddRestaurant" component={AddRestaurantPage} />

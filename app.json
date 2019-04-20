@@ -1,13 +1,10 @@
 {
   "expo": {
-    "name": "kmutt restaurant",
+    "name": "KMUTT Restaurant",
     "slug": "int493-assignment-3",
     "privacy": "public",
     "sdkVersion": "32.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,11 +16,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kmutt.sit.kmuttrestaurent"
+    },
+    "android": {
+      "package": "com.kmutt.sit.kmuttrestaurent"
     }
   }
 }
