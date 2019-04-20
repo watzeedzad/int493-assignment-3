@@ -2,6 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "concurrently \"expo start\" \"yarn --cwd ./server start\"",
+    "start-dev": "concurrently \"expo start\" \"yarn --cwd ./server start-dev\"",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject"
@@ -23,7 +24,8 @@
     "yarn": "~1.15.2"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "nodemon": "~1.18.11"
   },
   "private": true
 }

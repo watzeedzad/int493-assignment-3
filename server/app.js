@@ -2,17 +2,17 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-let cors = require("cors");
+// let cors = require("cors");
 let mongoose = require("mongoose");
 require("dotenv").config();
 
 db_uri = process.env.DB_URI;
-console.log(db_uri);
 
 mongoose.Promise = global.Promise;
 let connection = mongoose
   .connect(db_uri, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    dbName: "kmutt-restaurant"
   })
   .then(console.log("MongoDb Connected"))
   .catch(err => {
@@ -35,13 +35,12 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [origin_url],
-    methods: ["GET", "POST"],
-    credentials: true
-  })
-);
+// app.use(
+//   cors({
+//     origin: [origin_url],
+//     methods: ["GET", "POST"],
+//   })
+// );
 app.use(express.static(path.join(__dirname, "public")));
 
 // app.use("/", indexRouter);
