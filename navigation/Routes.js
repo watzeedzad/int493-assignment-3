@@ -11,6 +11,7 @@ import AddRestaurantPage from "../pages/AddRestaurant";
 import ReviewDetailPage from "../pages/ReviewDetail";
 import SearchPage from "../pages/Search";
 import UserProfilePage from "../pages/UserProfile";
+import AddReviewPage from '../pages/AddReview'
 
 // create a component
 class Routes extends Component {
