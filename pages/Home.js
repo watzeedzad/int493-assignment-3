@@ -1,19 +1,47 @@
-//import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
-
-// create a component
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { connect } from 'react-redux'
+import * as actions from '../redux/actions'
 class Home extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+
+    };
+  }
+
+  componentDidMount() {
+    this.props.loadRestaurents()
+  }
+
+  renderItem = ({ item }) => {
+    return (
+      <Text>{item.id}</Text>
+    )
+  }
+
   render() {
+    const { restaurents } = this.props
+
+    if (restaurents.isRejected) {
+      return <Text>Error:{restaurents.data}</Text>
+  }
+
     return (
       <View style={styles.container}>
-        <Text>Home</Text>
+        {restaurents.isLoading ? <Text>Loading...</Text> :
+          <FlatList
+            data={restaurents.data}
+            renderItem={this.renderItem}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        }
       </View>
     );
   }
 }
 
-// define your styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -23,5 +51,10 @@ const styles = StyleSheet.create({
   }
 });
 
-//make this component available to the app
-export default Home;
+function mapStateToProps(state) {
+  return {
+    restaurents: state.restaurentReducers.restaurents,
+  }
+}
+
+export default connect(mapStateToProps,actions)(Home);
