@@ -1,6 +1,10 @@
 let express = require("express");
 let router = express.Router();
 let restaurant = require("../model/Restaurant");
+const passport = require("passport");
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const JwtStrategy = require("passport-jwt").Strategy;
+require("dotenv").config();
 
 router.get("/getRestaurantDetail", (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
@@ -34,6 +38,14 @@ router.get("/getRestaurantDetail", (req, res) => {
     }
   });
 });
+
+router.put("/addRestaurant", (req, res, next) => {
+
+})
+
+router.put("/addRestaurant", (req, res) => {
+
+})
 
 async function getRestaurantDetail(restaurantId, callback) {
   await restaurant.findOne(
