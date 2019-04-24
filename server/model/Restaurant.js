@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
+const autoIncrement = require('mongoose-sequence')(mongoose);
 
 const { Schema } = mongoose;
 
 const restaurantSchema = new Schema({
-  restaurantId: Number,
   restaurantName: String,
   restaurantRating: Number,
   restaurantTypeId: Number,
@@ -16,5 +16,9 @@ const restaurantSchema = new Schema({
   restaurantLat: Number,
   restaurantLong: Number
 });
+
+userSchema.plugin(autoIncrement, {
+  inc_field: 'restaurantId'
+})
 
 module.exports = mongoose.model("Restaurant", restaurantSchema);

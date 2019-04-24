@@ -50,29 +50,39 @@ router.get("/getAllRestaurantType", (req, res) => {
 });
 
 async function getAllRestaurant(callback) {
-  await restaurant.find({}, (err, result) => {
-    if (err) {
-      console.log(err);
-      callback(false, []);
-    } else if (!result) {
-      callback(true, []);
-    } else {
-      callback(true, result);
-    }
-  });
+  try {
+    await restaurant.find({}, (err, result) => {
+      if (err) {
+        console.log(err);
+        callback(false, []);
+      } else if (!result) {
+        callback(true, []);
+      } else {
+        callback(true, result);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    callback(false, []);
+  }
 }
 
 async function getAllRestaurantType(callback) {
-  await restaurantType.find({}, (err, result) => {
-    if (err) {
-      console.log(err);
-      callback(false, []);
-    } else if (!result) {
-      callback(true, []);
-    } else {
-      callback(true, result);
-    }
-  });
+  try {
+    await restaurantType.find({}, (err, result) => {
+      if (err) {
+        console.log(err);
+        callback(false, []);
+      } else if (!result) {
+        callback(true, []);
+      } else {
+        callback(true, result);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    callback(false, []);
+  }
 }
 
 module.exports = router;

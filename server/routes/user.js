@@ -265,7 +265,7 @@ async function addUser(
     });
   } catch (error) {
     console.log(error);
-    callback(true);
+    callback(false);
   }
 }
 
