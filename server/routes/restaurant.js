@@ -8,6 +8,7 @@ const JwtStrategy = require("passport-jwt").Strategy;
 let multer = require("multer");
 let multer_s3 = require("multer-s3");
 let aws = require("aws-sdk");
+let user = require("../model/User");
 require("dotenv").config();
 
 const jwtOptions = {
@@ -26,6 +27,30 @@ const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
   });
 });
 
+async function login(username, callback) {
+  try {
+    await user.findOne(
+      {
+        username: username
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          callback(null);
+        } else if (!result) {
+          //   console.log(result);
+          callback(null);
+        } else {
+          callback(result);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    callback(null);
+  }
+}
+
 passport.use(jwtAuth);
 
 const requireJWTAuth = passport.authenticate("jwt", { session: false });
@@ -40,10 +65,10 @@ const uploadToS3 = multer({
   storage: multer_s3({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
-    metadata: function(req, file, cb) {
+    metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
-    key: function(req, file, cb) {
+    key: function (req, file, cb) {
       cb(null, "photos/" + Date.now().toString());
     }
   })
@@ -84,6 +109,7 @@ router.get("/getRestaurantDetail", (req, res) => {
 
 router.put("/addRestaurant", requireJWTAuth, (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
+  console.log(req);
   let {
     restaurantName,
     restaurantOpenTime,
@@ -95,6 +121,17 @@ router.put("/addRestaurant", requireJWTAuth, (req, res, next) => {
     restaurantTypeId,
     restaurantAddress
   } = req.body;
+  console.log({
+    restaurantName,
+    restaurantOpenTime,
+    restaurantCloseTime,
+    restaurantOpenDate,
+    restaurantDesc,
+    restaurantLat,
+    restaurantLong,
+    restaurantTypeId,
+    restaurantAddress
+  })
   if (
     typeof restaurantName === "undefined" ||
     typeof restaurantOpenTime === "undefined" ||
@@ -110,6 +147,7 @@ router.put("/addRestaurant", requireJWTAuth, (req, res, next) => {
       error: true,
       message: "can not get data from all required parameter"
     });
+    return;
   }
   next();
 });
