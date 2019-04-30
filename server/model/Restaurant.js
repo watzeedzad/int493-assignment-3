@@ -17,8 +17,8 @@ const restaurantSchema = new Schema({
   restaurantLong: Number
 });
 
-userSchema.plugin(autoIncrement, {
+restaurantSchema.plugin(autoIncrement, {
   inc_field: 'restaurantId'
 })
 
-module.exports = mongoose.model("Restaurant", restaurantSchema);
+module.exports = mongoose.model("restaurant", restaurantSchema);

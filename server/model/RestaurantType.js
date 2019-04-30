@@ -7,4 +7,4 @@ const restaurantTypeSchema = new Schema({
   restaurantTypeDesc: Number
 });
 
-module.exports = mongoose.model("RestaurantType", restaurantTypeSchema);
+module.exports = mongoose.model("restaurantType", restaurantTypeSchema);

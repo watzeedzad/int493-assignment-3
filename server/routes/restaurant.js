@@ -165,45 +165,42 @@ router.put(
   }
 );
 
-router.get("/getAllRestaurantType", (req, res, next) => {
-  res.setHeader("Content-Type", "application/json");
-  next();
-});
-
-router.get("/getAllRestaurantType", (req, res) => {
-  getAllRestaurantType((errorStatus, restaurantTypeResult) => {
-    if (errorStatus) {
-      res.status(500).send({
-        error: true,
-        message: "error occur while getting all restaurant type"
-      });
-      return;
-    } else {
-      res.status(200).send({
-        error: false,
-        restaurantType: restaurantTypeResult
-      });
-    }
-  });
-});
-
 async function getRestaurantDetail(restaurantId, callback) {
   try {
-    await restaurant.findOne(
+    await restaurant.aggregate([
       {
-        restaurantId: restaurantId
+        $lookup: {
+          from: "restaurantTypes",
+          localField: "restaurantTypeId",
+          foreignField: "restaurantTypeId",
+          as: "restaurantDescObj"
+        }
       },
-      (err, result) => {
-        if (err) {
-          console.log(err);
-          callback(true, null);
-        } else if (!result) {
-          callback(false, null);
-        } else {
-          callback(false, result);
+      {
+        $match: {
+          restaurantId: restaurantId
+        }
+      },
+      {
+        $unwind: "$restaurantDescObj"
+      },
+      {
+        $project: {
+          restaurantId: 1,
+          restaurantName: 1,
+          restaurantRating: 1,
+          restaurantDesc: "$restaurantTypes.restaurantTypeDesc",
+          restaurantOpenTime: 1,
+          restaurantCloseTime: 1,
+          restaurantOpenDate: 1,
+          restaurantPicturePath: 1,
+          restaurantDesc: 1,
+          restaurantAddress: 1,
+          restaurantLat: 1,
+          restaurantLong: 1
         }
       }
-    );
+    ]);
   } catch (error) {
     console.log(error);
     callback(true, null);
@@ -250,24 +247,6 @@ async function addRestaurant(
   } catch (error) {
     console.log(error);
     callback(true, null);
-  }
-}
-
-async function getAllRestaurantType(callback) {
-  try {
-    await restaurantType.find({}, (err, result) => {
-      if (err) {
-        console.log(err);
-        callback(true, []);
-      } else if (!result) {
-        callback(false, []);
-      } else {
-        callback(false, result);
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    callback(true, []);
   }
 }
 
