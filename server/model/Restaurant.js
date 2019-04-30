@@ -17,7 +17,7 @@ const restaurantSchema = new Schema({
   restaurantLong: Number
 });
 
-userSchema.plugin(autoIncrement, {
+restaurantSchema.plugin(autoIncrement, {
   inc_field: 'restaurantId'
 })
 
