@@ -65,10 +65,10 @@ const uploadToS3 = multer({
   storage: multer_s3({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
-    metadata: function (req, file, cb) {
+    metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
-    key: function (req, file, cb) {
+    key: function(req, file, cb) {
       cb(null, "photos/" + Date.now().toString());
     }
   })
@@ -107,52 +107,12 @@ router.get("/getRestaurantDetail", (req, res) => {
   });
 });
 
-router.put("/addRestaurant", requireJWTAuth, (req, res, next) => {
+router.post("/addRestaurant", requireJWTAuth, (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
-  console.log(req);
-  let {
-    restaurantName,
-    restaurantOpenTime,
-    restaurantCloseTime,
-    restaurantOpenDate,
-    restaurantDesc,
-    restaurantLat,
-    restaurantLong,
-    restaurantTypeId,
-    restaurantAddress
-  } = req.body;
-  console.log({
-    restaurantName,
-    restaurantOpenTime,
-    restaurantCloseTime,
-    restaurantOpenDate,
-    restaurantDesc,
-    restaurantLat,
-    restaurantLong,
-    restaurantTypeId,
-    restaurantAddress
-  })
-  if (
-    typeof restaurantName === "undefined" ||
-    typeof restaurantOpenTime === "undefined" ||
-    typeof restaurantCloseTime === "undefined" ||
-    typeof restaurantOpenDate === "undefined" ||
-    typeof restaurantDesc === "undefined" ||
-    typeof restaurantLat === "undefined" ||
-    typeof restaurantLong === "undefined" ||
-    typeof restaurantTypeId === "undefined" ||
-    typeof restaurantAddress === "undefined"
-  ) {
-    res.status(500).send({
-      error: true,
-      message: "can not get data from all required parameter"
-    });
-    return;
-  }
   next();
 });
 
-router.put(
+router.post(
   "/addRestaurant",
   uploadToS3.single("restaurantPicture"),
   (req, res) => {
@@ -173,6 +133,23 @@ router.put(
       restaurantTypeId,
       restaurantAddress
     } = req.body;
+    if (
+      typeof restaurantName === "undefined" ||
+      typeof restaurantOpenTime === "undefined" ||
+      typeof restaurantCloseTime === "undefined" ||
+      typeof restaurantOpenDate === "undefined" ||
+      typeof restaurantDesc === "undefined" ||
+      typeof restaurantLat === "undefined" ||
+      typeof restaurantLong === "undefined" ||
+      typeof restaurantTypeId === "undefined" ||
+      typeof restaurantAddress === "undefined"
+    ) {
+      res.status(500).send({
+        error: true,
+        message: "can not get data from all required parameter"
+      });
+      return;
+    }
     addRestaurant(
       restaurantName,
       restaurantTypeId,

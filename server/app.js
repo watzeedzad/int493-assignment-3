@@ -4,7 +4,6 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 // let cors = require("cors");
 let mongoose = require("mongoose");
-let bodyParser = require("body-parser");
 require("dotenv").config();
 
 db_uri = process.env.DB_URI;
@@ -36,12 +35,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
 // app.use(
 //   cors({
 //     origin: [origin_url],
