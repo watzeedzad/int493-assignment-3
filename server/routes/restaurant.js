@@ -80,7 +80,7 @@ router.get("/getRestaurantDetail", (req, res, next) => {
 });
 
 router.get("/getRestaurantDetail", (req, res) => {
-  let restaurantId = req.query.restaurantId;
+  let restaurantId = parseInt(req.query.restaurantId);
 
   if (typeof restaurantId === "undefined") {
     res.status(500).send({
@@ -180,42 +180,81 @@ router.post(
   }
 );
 
+router.put("/editRestaurant", requireJWTAuth, (req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
+
+router.put("/editRestaurant", (req, res) => {
+
+})
+
+async function editRestaurant(
+  restaurantId,
+  restaurantName,
+  restaurantTypeId,
+  restaurantOpenTime,
+  restaurantCloseTime,
+  restaurantOpenDate,
+  restaurantPicturePath,
+  restaurantDesc,
+  restaurantAddress,
+  restaurantLat,
+  restaurantLong,
+  callback
+) {
+  await restaurant.findOneAndUpdate({
+    restaurantId: restaurantId
+  })
+}
+
 async function getRestaurantDetail(restaurantId, callback) {
   try {
-    await restaurant.aggregate([
-      {
-        $lookup: {
-          from: "restaurantTypes",
-          localField: "restaurantTypeId",
-          foreignField: "restaurantTypeId",
-          as: "restaurantDescObj"
+    await restaurant.aggregate(
+      [
+        {
+          $lookup: {
+            from: "restauranttypes",
+            localField: "restaurantTypeId",
+            foreignField: "restaurantTypeId",
+            as: "restaurantDescObj"
+          }
+        },
+        {
+          $unwind: "$restaurantDescObj"
+        },
+        {
+          $match: {
+            restaurantId: restaurantId
+          }
+        },
+        {
+          $project: {
+            restaurantId: 1,
+            restaurantName: 1,
+            restaurantRating: 1,
+            restaurantTypeDesc: "$restaurantDescObj.restaurantTypeDesc",
+            restaurantOpenTime: 1,
+            restaurantCloseTime: 1,
+            restaurantOpenDate: 1,
+            restaurantPicturePath: 1,
+            restaurantDesc: 1,
+            restaurantAddress: 1,
+            restaurantLat: 1,
+            restaurantLong: 1
+          }
         }
-      },
-      {
-        $match: {
-          restaurantId: restaurantId
-        }
-      },
-      {
-        $unwind: "$restaurantDescObj"
-      },
-      {
-        $project: {
-          restaurantId: 1,
-          restaurantName: 1,
-          restaurantRating: 1,
-          restaurantDesc: "$restaurantTypes.restaurantTypeDesc",
-          restaurantOpenTime: 1,
-          restaurantCloseTime: 1,
-          restaurantOpenDate: 1,
-          restaurantPicturePath: 1,
-          restaurantDesc: 1,
-          restaurantAddress: 1,
-          restaurantLat: 1,
-          restaurantLong: 1
+      ],
+      (err, result) => {
+        if (err) {
+          callback(true, null);
+        } else if (!result) {
+          callback(true, null);
+        } else {
+          callback(false, result);
         }
       }
-    ]);
+    );
   } catch (error) {
     console.log(error);
     callback(true, null);

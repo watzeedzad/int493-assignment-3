@@ -9,17 +9,17 @@ router.get("/getAllRestaurant", (req, res, next) => {
 });
 
 router.get("/getAllRestaurant", (req, res) => {
-  getAllRestaurant((status, restaurantResult) => {
-    if (status) {
-      res.status(200).send({
-        error: false,
-        restaurantResult: restaurantResult
-      });
-      return;
-    } else {
+  getAllRestaurant((errorStatus, restaurantResult) => {
+    if (errorStatus) {
       res.status(500).send({
         error: true,
         message: "error occur while getting all restaurant data from database"
+      });
+      return;
+    } else {
+      res.status(200).send({
+        error: false,
+        restaurantResult: restaurantResult
       });
       return;
     }
@@ -32,17 +32,17 @@ router.get("/getAllRestaurantType", (req, res, next) => {
 });
 
 router.get("/getAllRestaurantType", (req, res) => {
-  getAllRestaurantType((status, restaurantTypeResult) => {
-    if (status) {
-      res.status(200).send({
-        error: false,
-        restaurantTypeResult: restaurantTypeResult
-      });
-      return;
-    } else {
+  getAllRestaurantType((errorStatus, restaurantTypeResult) => {
+    if (errorStatus) {
       res.status(500).send({
         error: true,
         message: "error occur while getting data from database"
+      });
+      return;
+    } else {
+      res.status(200).send({
+        error: false,
+        restaurantTypeResult: restaurantTypeResult
       });
       return;
     }
@@ -54,16 +54,16 @@ async function getAllRestaurant(callback) {
     await restaurant.find({}, (err, result) => {
       if (err) {
         console.log(err);
-        callback(false, []);
+        callback(true, []);
       } else if (!result) {
         callback(true, []);
       } else {
-        callback(true, result);
+        callback(false, result);
       }
     });
   } catch (error) {
     console.log(error);
-    callback(false, []);
+    callback(true, []);
   }
 }
 
@@ -72,16 +72,16 @@ async function getAllRestaurantType(callback) {
     await restaurantType.find({}, (err, result) => {
       if (err) {
         console.log(err);
-        callback(false, []);
+        callback(true, []);
       } else if (!result) {
         callback(true, []);
       } else {
-        callback(true, result);
+        callback(false, result);
       }
     });
   } catch (error) {
     console.log(error);
-    callback(false, []);
+    callback(true, []);
   }
 }
 
