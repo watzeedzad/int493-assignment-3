@@ -185,9 +185,77 @@ router.put("/editRestaurant", requireJWTAuth, (req, res, next) => {
   next();
 });
 
-router.put("/editRestaurant", (req, res) => {
+router.put(
+  "/editRestaurant",
+  uploadToS3.single("restaurantPicture"),
+  (req, res) => {
+    let restaurantPicturePath;
+    let {
+      restaurantId,
+      restaurantName,
+      restaurantTypeId,
+      restaurantOpenTime,
+      restaurantCloseTime,
+      restaurantOpenDate,
+      restaurantDesc,
+      restaurantAddress,
+      restaurantLat,
+      restaurantLong
+    } = req.body;
 
-})
+    if (
+      typeof restaurantId === "undefined" ||
+      typeof restaurantName === "undefined" ||
+      typeof restaurantOpenTime === "undefined" ||
+      typeof restaurantCloseTime === "undefined" ||
+      typeof restaurantOpenDate === "undefined" ||
+      typeof restaurantDesc === "undefined" ||
+      typeof restaurantLat === "undefined" ||
+      typeof restaurantLong === "undefined" ||
+      typeof restaurantTypeId === "undefined" ||
+      typeof restaurantAddress === "undefined"
+    ) {
+      res.status(500).send({
+        error: true,
+        message: "can not get data from all required parameter"
+      });
+      return;
+    }
+    if (typeof req.file === "undefined") {
+      restaurantPicturePath = null;
+    } else {
+      restaurantPicturePath = req.file.key;
+    }
+
+    editRestaurant(
+      restaurantId,
+      restaurantName,
+      restaurantTypeId,
+      restaurantOpenTime,
+      restaurantCloseTime,
+      restaurantPicturePath,
+      restaurantDesc,
+      restaurantAddress,
+      restaurantLat,
+      restaurantLong,
+      (errorStatus, editRestaurantData) => {
+        if (errorStatus) {
+          res.status(500).send({
+            error: true,
+            message: "error occur while updating restaurant"
+          });
+          return;
+        } else {
+          res.status(200).send({
+            error: false,
+            editRestaurantData: editRestaurantData
+          });
+          return;
+        }
+      }
+    );
+  }
+);
 
 async function editRestaurant(
   restaurantId,
@@ -203,9 +271,40 @@ async function editRestaurant(
   restaurantLong,
   callback
 ) {
-  await restaurant.findOneAndUpdate({
-    restaurantId: restaurantId
-  })
+  try {
+    await restaurant.findOneAndUpdate(
+      {
+        restaurantId: restaurantId
+      },
+      {
+        $set: {
+          restaurantName: restaurantName,
+          restaurantTypeId: restaurantTypeId,
+          restaurantOpenTime: restaurantOpenTime,
+          restaurantCloseTime: restaurantCloseTime,
+          restaurantOpenDate: restaurantOpenDate,
+          restaurantPicturePath: restaurantPicturePath,
+          restaurantDesc: restaurantDesc,
+          restaurantAddress: restaurantAddress,
+          restaurantLat: restaurantLat,
+          restaurantLong: restaurantLong
+        }
+      },
+      (err, doc) => {
+        if (err) {
+          console.log(err);
+          callback(true, null);
+        } else if (!doc) {
+          callbackA(true, null);
+        } else {
+          callback(false, doc);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    callback(true, null);
+  }
 }
 
 async function getRestaurantDetail(restaurantId, callback) {

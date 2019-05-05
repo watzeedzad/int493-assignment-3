@@ -6,6 +6,8 @@ const reviewSchema = new Schema({
   reviewId: Number,
   userId: Number,
   restaurantId: Number,
+  reviewRate: Number,
+  reviewDesc: String,
   reviewPicturePath: [],
   reviewDate: Date
 });
