@@ -64,13 +64,14 @@ const uploadToS3 = multer({
   storage: multer_s3({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
+    acl: "public-read",
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
       let fileMimeType = file.mimetype.split("/");
       let fileExtension = fileMimeType[1];
-      cb(null, "photos/" + Date.now().toString() + "." + fileExtension);
+      cb(null, "photos/reviews/" + Date.now().toString() + "." + fileExtension);
     }
   })
 });

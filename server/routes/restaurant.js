@@ -64,13 +64,17 @@ const uploadToS3 = multer({
   storage: multer_s3({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
+    acl: "public-read",
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
       let fileMimeType = file.mimetype.split("/");
       let fileExtension = fileMimeType[1];
-      cb(null, "photos/" + Date.now().toString() + "." + fileExtension);
+      cb(
+        null,
+        "photos/restaurants" + Date.now().toString() + "." + fileExtension
+      );
     }
   })
 });
@@ -121,7 +125,7 @@ router.post(
     if (typeof req.file === "undefined") {
       restaurantPicturePath = null;
     } else {
-      restaurantPicturePath = req.file.key;
+      restaurantPicturePath = req.file.location;
     }
     let {
       restaurantName,
@@ -225,7 +229,7 @@ router.put(
     if (typeof req.file === "undefined") {
       restaurantPicturePath = null;
     } else {
-      restaurantPicturePath = req.file.key;
+      restaurantPicturePath = req.file.location;
     }
 
     editRestaurant(
@@ -377,7 +381,7 @@ async function addRestaurant(
   try {
     let newRestaurantData = new restaurant({
       restaurantName: restaurantName,
-      restaurantRating: null,
+      restaurantRating: 0,
       restaurantTypeId: restaurantTypeId,
       restaurantOpenTime: restaurantOpenTime,
       restaurantCloseTime: restaurantCloseTime,
