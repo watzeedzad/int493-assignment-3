@@ -117,15 +117,27 @@ router.post("/addReview", requireJWTAuth, (req, res, next) => {
 router.post("/addReview", uploadToS3.array("reviewPicture"), (req, res) => {
   let userId = req.user.user;
   console.log();
-  let reviewPicturePath;
+  let reviewPicturePath = [];
   let { restaurantId, reviewRate, reviewDesc, reviveDate } = req.body;
-  // if (typeof ) {
+  console.log(req.files);
+  if (!typeof req.files === "undefined") {
+    req.files.forEach(value => {
+      reviewPicturePath.push(value.location);
+    });
+  }
 
-  // }
+  
   res.status(200).send(req.files);
 });
 
-async function addReview() {}
+async function addReview() {
+  try {
+    let newReviewData = new review({});
+  } catch (error) {
+    console.log(error);
+    callback(true, null);
+  }
+}
 
 async function getRestaurantReviews(restaurantId, callback) {
   try {

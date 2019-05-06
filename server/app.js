@@ -6,7 +6,7 @@ var logger = require("morgan");
 let mongoose = require("mongoose");
 require("dotenv").config();
 
-db_uri = process.env.DB_URI;
+let db_uri = process.env.DB_URI;
 
 mongoose.Promise = global.Promise;
 let connection = mongoose
@@ -29,7 +29,7 @@ let userRouter = require("./routes/user");
 
 var app = express();
 
-origin_url = process.env.ORIGIN_URL;
+let origin_url = process.env.ORIGIN_URL;
 
 app.use(logger("dev"));
 app.use(express.json());

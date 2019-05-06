@@ -136,7 +136,8 @@ router.post(
       restaurantLat,
       restaurantLong,
       restaurantTypeId,
-      restaurantAddress
+      restaurantAddress,
+      restaurantTel
     } = req.body;
     if (
       typeof restaurantName === "undefined" ||
@@ -166,6 +167,7 @@ router.post(
       restaurantAddress,
       restaurantLat,
       restaurantLong,
+      restaurantTel,
       (errorStatus, restaurantResult) => {
         if (errorStatus) {
           res.status(500).send({
@@ -205,7 +207,8 @@ router.put(
       restaurantDesc,
       restaurantAddress,
       restaurantLat,
-      restaurantLong
+      restaurantLong,
+      restaurantTel
     } = req.body;
 
     if (
@@ -218,7 +221,8 @@ router.put(
       typeof restaurantLat === "undefined" ||
       typeof restaurantLong === "undefined" ||
       typeof restaurantTypeId === "undefined" ||
-      typeof restaurantAddress === "undefined"
+      typeof restaurantAddress === "undefined" ||
+      typeof restaurantTel === "undefined"
     ) {
       res.status(500).send({
         error: true,
@@ -243,6 +247,7 @@ router.put(
       restaurantAddress,
       restaurantLat,
       restaurantLong,
+      restaurantTel,
       (errorStatus, editRestaurantData) => {
         if (errorStatus) {
           res.status(500).send({
@@ -274,6 +279,7 @@ async function editRestaurant(
   restaurantAddress,
   restaurantLat,
   restaurantLong,
+  restaurantTel,
   callback
 ) {
   try {
@@ -292,7 +298,8 @@ async function editRestaurant(
           restaurantDesc: restaurantDesc,
           restaurantAddress: restaurantAddress,
           restaurantLat: restaurantLat,
-          restaurantLong: restaurantLong
+          restaurantLong: restaurantLong,
+          restaurantTel: restaurantTel
         }
       },
       (err, doc) => {
@@ -376,6 +383,7 @@ async function addRestaurant(
   restaurantAddress,
   restaurantLat,
   restaurantLong,
+  restaurantTel,
   callback
 ) {
   try {
@@ -390,7 +398,8 @@ async function addRestaurant(
       restaurantDesc: restaurantDesc,
       restaurantAddress: restaurantAddress,
       restaurantLat: restaurantLat,
-      restaurantLong: restaurantLong
+      restaurantLong: restaurantLong,
+      restaurantTel: restaurantTel
     });
     await newRestaurantData.save((err, doc) => {
       if (err) {
