@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let review = require("../model/Review");
+let user = require("../model/User");
 const passport = require("passport");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -67,7 +68,9 @@ const uploadToS3 = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, "photos/" + Date.now().toString());
+      let fileMimeType = file.mimetype.split("/");
+      let fileExtension = fileMimeType[1];
+      cb(null, "photos/" + Date.now().toString() + "." + fileExtension);
     }
   })
 });
@@ -105,20 +108,23 @@ router.get("/getRestaurantReviews", (req, res) => {
   });
 });
 
-router.post("/addReview", requireJWTAuth, (req, res) => {
+router.post("/addReview", requireJWTAuth, (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
   next();
 });
 
 router.post("/addReview", uploadToS3.array("reviewPicture"), (req, res) => {
-  let {
-    
-  }
+  let userId = req.user.user;
+  console.log();
+  let reviewPicturePath;
+  let { restaurantId, reviewRate, reviewDesc, reviveDate } = req.body;
+  // if (typeof ) {
+
+  // }
+  res.status(200).send(req.files);
 });
 
-async function addReview() {
-
-}
+async function addReview() {}
 
 async function getRestaurantReviews(restaurantId, callback) {
   try {

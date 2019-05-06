@@ -51,16 +51,46 @@ router.get("/getAllRestaurantType", (req, res) => {
 
 async function getAllRestaurant(callback) {
   try {
-    await restaurant.find({}, (err, result) => {
-      if (err) {
-        console.log(err);
-        callback(true, []);
-      } else if (!result) {
-        callback(true, []);
-      } else {
-        callback(false, result);
+    await restaurant.aggregate(
+      [
+        {
+          $lookup: {
+            from: "restauranttypes",
+            localField: "restaurantTypeId",
+            foreignField: "restaurantTypeId",
+            as: "restaurantDescObj"
+          }
+        },
+        {
+          $unwind: "$restaurantDescObj"
+        },
+        {
+          $project: {
+            restaurantId: 1,
+            restaurantName: 1,
+            restaurantRating: 1,
+            restaurantTypeDesc: "$restaurantDescObj.restaurantTypeDesc",
+            restaurantOpenTime: 1,
+            restaurantCloseTime: 1,
+            restaurantOpenDate: 1,
+            restaurantPicturePath: 1,
+            restaurantDesc: 1,
+            restaurantAddress: 1,
+            restaurantLat: 1,
+            restaurantLong: 1
+          }
+        }
+      ],
+      (err, result) => {
+        if (err) {
+          callback(true, []);
+        } else if (!result) {
+          callback(true, []);
+        } else {
+          callback(false, result);
+        }
       }
-    });
+    );
   } catch (error) {
     console.log(error);
     callback(true, []);

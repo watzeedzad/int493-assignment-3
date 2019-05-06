@@ -1,7 +1,6 @@
 let express = require("express");
 let router = express.Router();
 let restaurant = require("../model/Restaurant");
-let restaurantType = require("../model/RestaurantType");
 const passport = require("passport");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -69,7 +68,9 @@ const uploadToS3 = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, "photos/" + Date.now().toString());
+      let fileMimeType = file.mimetype.split("/");
+      let fileExtension = fileMimeType[1];
+      cb(null, "photos/" + Date.now().toString() + "." + fileExtension);
     }
   })
 });
