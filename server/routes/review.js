@@ -114,25 +114,84 @@ router.post("/addReview", requireJWTAuth, (req, res, next) => {
   next();
 });
 
-router.post("/addReview", uploadToS3.array("reviewPicture"), (req, res) => {
-  let userId = req.user.user;
-  console.log();
-  let reviewPicturePath = [];
-  let { restaurantId, reviewRate, reviewDesc, reviveDate } = req.body;
-  console.log(req.files);
-  if (!typeof req.files === "undefined") {
-    req.files.forEach(value => {
-      reviewPicturePath.push(value.location);
-    });
+router.post(
+  "/addReview",
+  uploadToS3.array("reviewPicture"),
+  async (req, res) => {
+    let userId = req.user.sub;
+    let reviewPicturePath = [];
+    let { restaurantId, reviewRate, reviewDesc } = req.body;
+
+    if (
+      typeof restaurantId === "undefined" ||
+      typeof reviewRate === "undefined" ||
+      typeof reviewDesc === "undefined"
+    ) {
+      res.status(500).send({
+        error: true,
+        message: "can not get data from all required parameter"
+      });
+      return;
+    }
+
+    if (typeof req.files !== "undefined") {
+      req.files.forEach(value => {
+        reviewPicturePath.push(value.location);
+      });
+    }
+
+    await addReview(
+      userId,
+      restaurantId,
+      reviewRate,
+      reviewDesc,
+      reviewPicturePath,
+      (errorStatus, addReviewResultData) => {
+        if (errorStatus) {
+          res.status(500).send({
+            error: true,
+            message: "error occur while adding new review"
+          });
+          return;
+        } else {
+          res.status(200).send({
+            error: false,
+            review: addReviewResultData
+          });
+          return;
+        }
+      }
+    );
   }
+);
 
-  
-  res.status(200).send(req.files);
-});
-
-async function addReview() {
+async function addReview(
+  userId,
+  restaurantId,
+  reviewRate,
+  reviewDesc,
+  reviewPicturePath,
+  callback
+) {
   try {
-    let newReviewData = new review({});
+    let newReviewData = new review({
+      userId: userId,
+      restaurantId: restaurantId,
+      reviewRate: reviewRate,
+      reviewDesc: reviewDesc,
+      reviewDate: new Date(),
+      reviewPicturePath: reviewPicturePath
+    });
+    await newReviewData.save((err, doc) => {
+      if (err) {
+        console.log(err);
+        callback(true, null);
+      } else if (!doc) {
+        callback(true, null);
+      } else {
+        callback(false, doc);
+      }
+    });
   } catch (error) {
     console.log(error);
     callback(true, null);

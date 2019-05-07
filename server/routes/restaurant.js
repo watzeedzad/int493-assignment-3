@@ -73,7 +73,7 @@ const uploadToS3 = multer({
       let fileExtension = fileMimeType[1];
       cb(
         null,
-        "photos/restaurants" + Date.now().toString() + "." + fileExtension
+        "photos/restaurants/" + Date.now().toString() + "." + fileExtension
       );
     }
   })
