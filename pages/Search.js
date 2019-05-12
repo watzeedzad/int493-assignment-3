@@ -1,13 +1,41 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, StatusBar } from "react-native";
+import { SearchBar } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
+import BackHeader from "../components/Utils/BackHeader";
 
 // create a component
 class Search extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      search: ""
+    };
+  }
+
+  updateSearch = search => {
+    this.setState({ search });
+  };
+
   render() {
+    const { search } = this.state;
+    // console.log(this.props)
+
     return (
       <View style={styles.container}>
-        <Text>Search</Text>
+        <BackHeader
+          titleText={"Search"}
+          onPress={() => {
+            Actions.pop();
+          }}
+        />
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={search}
+        />
       </View>
     );
   }
@@ -17,9 +45,7 @@ class Search extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#2c3e50"
+    marginTop: StatusBar.currentHeight
   }
 });
 

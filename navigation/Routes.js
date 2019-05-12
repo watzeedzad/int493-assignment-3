@@ -11,14 +11,14 @@ import AddRestaurantPage from "../pages/AddRestaurant";
 import ReviewDetailPage from "../pages/ReviewDetail";
 import SearchPage from "../pages/Search";
 import UserProfilePage from "../pages/UserProfile";
-import AddReviewPage from '../pages/AddReview'
+import AddReviewPage from "../pages/AddReview";
 
 // create a component
 class Routes extends Component {
   render() {
     return (
       <Router>
-        <Scene key="root">
+        <Scene key="root" hideNavBar hideTabBar>
           <Scene key="Login" component={LoginPage} />
           <Scene key="Register" component={RegisterPage} />
           <Scene key="EditUser" component={EditUserPage} />

@@ -1,26 +1,31 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from "react-native";
-import { connect } from 'react-redux'
-import * as actions from '../redux/actions'
-import { Card } from 'react-native-paper'
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ScrollView
+} from "react-native";
+import { connect } from "react-redux";
+import * as actions from "../redux/actions";
+import { Card } from "react-native-paper";
+import Header from "../components/Utils/Header";
+import { Actions } from "react-native-router-flux";
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.props.loadRestaurents()
-    this.props.loadRestaurentTypes()
+    this.props.loadRestaurents();
+    this.props.loadRestaurentTypes();
   }
 
-  _onPress() {
-
-  }
+  _onPress() {}
 
   renderNavItem = ({ item }) => {
     return (
@@ -30,7 +35,7 @@ class Home extends Component {
         </TouchableOpacity>
       </Card>
     );
-  }
+  };
 
   renderItem = ({ item }) => {
     return (
@@ -41,40 +46,49 @@ class Home extends Component {
           <Text>Type : {item.restaurantTypeDesc}</Text>
         </TouchableOpacity>
       </Card>
-
-    )
-  }
+    );
+  };
 
   render() {
-    const { restaurents, restaurentTypes } = this.props
-    console.log(restaurentTypes)
+    const { restaurents, restaurentTypes } = this.props;
+    console.log(restaurentTypes);
     if (restaurents.isRejected) {
-      return <Text>Error:{restaurents.data}</Text>
+      return <Text>Error:{restaurents.data}</Text>;
     }
     if (restaurentTypes.isRejected) {
-      return <Text>Error:{restaurentTypes.data}</Text>
+      return <Text>Error:{restaurentTypes.data}</Text>;
     }
 
     return (
       <View style={styles.container}>
+        <Header
+          titleText={"Home"}
+          onPress={() => {
+            Actions.Search();
+          }}
+        />
         <ScrollView>
-          {restaurentTypes.isLoading ? <Text>Loading...</Text> :
+          {restaurentTypes.isLoading ? (
+            <Text>Loading...</Text>
+          ) : (
             <FlatList
               data={restaurentTypes.data}
               renderItem={this.renderNavItem}
-              keyExtractor={(item) => item._id.toString()}
+              keyExtractor={item => item._id.toString()}
               horizontal={true}
             />
-          }
-          {restaurents.isLoading ? <Text>Loading...</Text> :
+          )}
+          {restaurents.isLoading ? (
+            <Text>Loading...</Text>
+          ) : (
             <FlatList
               data={restaurents.data}
               renderItem={this.renderItem}
-              keyExtractor={(item) => item._id.toString()}
+              keyExtractor={item => item._id.toString()}
             />
-          }
+          )}
         </ScrollView>
-      </View >
+      </View>
     );
   }
 }
@@ -83,23 +97,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
     // backgroundColor: "#2c3e50"
   },
   card: {
     width: 350,
     height: 200,
     margin: 10,
-    alignItems: "center",
-
-  },
+    alignItems: "center"
+  }
 });
 
 function mapStateToProps(state) {
   return {
     restaurents: state.restaurentReducers.restaurents,
-    restaurentTypes: state.restaurentReducers.restaurentTypes,
-  }
+    restaurentTypes: state.restaurentReducers.restaurentTypes
+  };
 }
 
-export default connect(mapStateToProps, actions)(Home);
+export default connect(
+  mapStateToProps,
+  actions
+)(Home);
