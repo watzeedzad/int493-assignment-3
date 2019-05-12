@@ -1,27 +1,96 @@
-//import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Image } from "react-native";
+import { connect } from "react-redux";
+import * as actions from "../redux/actions";
+import { Card } from "react-native-paper";
+import Header from "../components/Utils/Header";
+import { Actions } from "react-native-router-flux";
+import moment from 'moment';
 
-// create a component
 class Restaurant extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.loadReviews(this.props.restaurant.restaurantId);
+  }
+
+  renderItem = ({ item }) => {
+    return (
+      <Card style={styles.card} elevation={3}>
+        <Text style={{alignSelf:'center'}}>รีวิว</Text>
+        <Text>วันที่ : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}</Text>
+        <Text>ดาว : {item.reviewRate}</Text>
+        <Text>รีวิว : {item.reviewDesc}</Text>
+        {item.reviewPicturePath.map(e => {
+          return (
+            <Image
+              style={{ width: 100, height: 65 }}
+              source={{ uri: e }}
+            />
+          )
+        })}
+
+      </Card>
+    );
+  };
+
   render() {
+    const { reviews } = this.props;
+    console.log(reviews)
+    if (reviews.isRejected) {
+      return <View>
+        <Header titleText={"Restaurant"} onPress={() => { Actions.Search() }} />
+        <Text>Error:{reviews.data}</Text>
+      </View>
+    }
+
     return (
       <View style={styles.container}>
-        <Text>Restaurant</Text>
+        <Header
+          titleText={"Restaurant"}
+          onPress={() => {
+            Actions.Search();
+          }}
+        />
+        <View>
+          {reviews.isLoading ? (
+            <Text>Loading...</Text>
+          ) : (
+              <FlatList
+                data={reviews.data}
+                renderItem={this.renderItem}
+                keyExtractor={item => item._id.toString()}
+              />
+            )}
+        </View>
       </View>
     );
   }
 }
 
-// define your styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#2c3e50"
+    // justifyContent: "center",
+    alignItems: "center"
+  },
+  card: {
+    width: 350,
+    height: 200,
+    margin: 10,
+    alignItems: "center"
   }
 });
 
-//make this component available to the app
-export default Restaurant;
+
+function mapStateToProps(state) {
+  return {
+    reviews: state.reviewReducers.reviews,
+  };
+}
+
+export default connect(mapStateToProps, actions)(Restaurant);
