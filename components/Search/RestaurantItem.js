@@ -12,12 +12,12 @@ import { Card } from "react-native-paper";
 // create a component
 class RestaurantItem extends Component {
   render() {
-    let { restaurantName, restaurantRating, restaurantPicture } = this.props;
+    let { restaurantName, restaurantRating, restaurantPicture } = this.props.item;
 
     return (
       <View style={styles.container}>
         <Card style={styles.card} elevation={3}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.onPress(this.props.item)}>
             <ImageBackground
               source={{ uri: restaurantPicture }}
               imageStyle={styles.restaurantItemBackground}

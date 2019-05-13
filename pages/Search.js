@@ -43,11 +43,7 @@ class Search extends Component {
 
   _restaurantListRenderItem = ({ item }) => {
     return (
-      <RestaurantItem
-        restaurantPicture={item.restaurantPicturePath}
-        restaurantName={item.restaurantName}
-        restaurantRating={item.restaurantRating}
-      />
+      <RestaurantItem item={item}/>
     );
   };
 

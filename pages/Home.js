@@ -5,7 +5,7 @@ import * as actions from "../redux/actions";
 import { Card } from "react-native-paper";
 import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";
-import RestaurantItem from "../components/home/RestaurantItem";
+import RestaurantItem from "../components/Search/RestaurantItem";
 
 class Home extends Component {
   constructor(props) {
