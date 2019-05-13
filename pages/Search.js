@@ -1,9 +1,10 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet, StatusBar } from "react-native";
+import { View, Text, StyleSheet, StatusBar, FlatList } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
+import RestaurantItem from "../components/Search/RestaurantItem";
 
 // create a component
 class Search extends Component {
@@ -11,17 +12,50 @@ class Search extends Component {
     super(props);
 
     this.state = {
-      search: ""
+      search: "",
+      restaurantData: this.props.restaurantData,
+      filterRestaurantData: []
     };
   }
 
   updateSearch = search => {
     this.setState({ search });
+    if (search.length == 0) {
+      this.setState({
+        filterRestaurantData: []
+      });
+    } else {
+      const restaurantData = this.state.restaurantData;
+      const searchRestaurantResult = restaurantData.filter(restaurant => {
+        let { restaurantName, restaurantDesc } = restaurant;
+        if (
+          restaurantName.includes(search) ||
+          restaurantDesc.includes(search)
+        ) {
+          return restaurant;
+        }
+      });
+      this.setState({
+        filterRestaurantData: searchRestaurantResult
+      });
+    }
   };
+
+  _restaurantListRenderItem = ({ item }) => {
+    return (
+      <RestaurantItem
+        restaurantPicture={item.restaurantPicturePath}
+        restaurantName={item.restaurantName}
+        restaurantRating={item.restaurantRating}
+      />
+    );
+  };
+
+  _restaurantListKeyExtractor = item => item._id.toString();
 
   render() {
     const { search } = this.state;
-    // console.log(this.props)
+    console.log(this.state.restaurantData);
 
     return (
       <View style={styles.container}>
@@ -35,6 +69,13 @@ class Search extends Component {
           placeholder="Type Here..."
           onChangeText={this.updateSearch}
           value={search}
+          round={true}
+          lightTheme={true}
+        />
+        <FlatList
+          data={this.state.filterRestaurantData}
+          renderItem={this._restaurantListRenderItem}
+          keyExtractor={this._restaurantListKeyExtractor}
         />
       </View>
     );

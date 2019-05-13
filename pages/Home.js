@@ -64,7 +64,9 @@ class Home extends Component {
         <Header
           titleText={"Home"}
           onPress={() => {
-            Actions.Search();
+            Actions.Search({
+              restaurantData: restaurents.data
+            });
           }}
         />
         <ScrollView>
