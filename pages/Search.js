@@ -1,10 +1,11 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet, StatusBar, FlatList } from "react-native";
+import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
 import RestaurantItem from "../components/Search/RestaurantItem";
+import { Card } from "react-native-paper";
 
 // create a component
 class Search extends Component {
@@ -18,6 +19,10 @@ class Search extends Component {
     };
   }
 
+  componentDidMount() {
+    this.updateSearch(this.props.search ? this.props.search : "");
+  }
+
   updateSearch = search => {
     this.setState({ search });
     if (search.length == 0) {
@@ -27,10 +32,11 @@ class Search extends Component {
     } else {
       const restaurantData = this.state.restaurantData;
       const searchRestaurantResult = restaurantData.filter(restaurant => {
-        let { restaurantName, restaurantDesc } = restaurant;
+        let { restaurantName, restaurantDesc, restaurantTypeDesc } = restaurant;
         if (
           restaurantName.includes(search) ||
-          restaurantDesc.includes(search)
+          restaurantDesc.includes(search) ||
+          restaurantTypeDesc.includes(search)
         ) {
           return restaurant;
         }
@@ -43,7 +49,7 @@ class Search extends Component {
 
   _restaurantListRenderItem = ({ item }) => {
     return (
-      <RestaurantItem item={item}/>
+      <RestaurantItem item={item} onPress={this.props.onPress} />
     );
   };
 
@@ -68,11 +74,21 @@ class Search extends Component {
           round={true}
           lightTheme={true}
         />
-        <FlatList
-          data={this.state.filterRestaurantData}
-          renderItem={this._restaurantListRenderItem}
-          keyExtractor={this._restaurantListKeyExtractor}
-        />
+        <ScrollView>
+          <FlatList
+            data={this.state.filterRestaurantData}
+            renderItem={this._restaurantListRenderItem}
+            keyExtractor={this._restaurantListKeyExtractor}
+          />
+          <Card style={styles.card} elevation={3}>
+            <TouchableOpacity>
+              <Image
+                style={{ width: 150, height: 150, margin:10 }}
+                source={{ uri: 'https://www.iconsdb.com/icons/preview/orange/add-xxl.png' }}
+              />
+            </TouchableOpacity>
+          </Card>
+        </ScrollView>
       </View>
     );
   }
@@ -82,8 +98,15 @@ class Search extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight
-  }
+    marginTop: StatusBar.currentHeight,
+  },
+  card: {
+    width: 170,
+    height: 170,
+    margin: 10,
+    alignSelf: 'center',
+    alignItems: 'center'
+  },
 });
 
 //make this component available to the app

@@ -27,11 +27,17 @@ class Home extends Component {
 
   renderNavItem = ({ item }) => {
     return (
-      <Card style={{ margin: 5, width: 80, height: 40 }} elevation={3}>
-        <TouchableOpacity>
-          <Text>{item.restaurantTypeDesc}</Text>
-        </TouchableOpacity>
-      </Card>
+      <TouchableOpacity onPress={() => {
+        Actions.Search({
+          restaurantData: this.props.restaurants.data,
+          onPress: this.onPressRestaurant,
+          search: item.restaurantTypeDesc
+        });
+      }}>
+        <Card style={{ margin: 5, width: 80, height: 40, alignItems: 'center' }} elevation={3}>
+          <Text style={{fontSize: 18,opacity: 1}}>{item.restaurantTypeDesc}</Text>
+        </Card>
+      </TouchableOpacity>
     );
   };
 
@@ -57,7 +63,8 @@ class Home extends Component {
           titleText={"Home"}
           onPress={() => {
             Actions.Search({
-              restaurantData: restaurents.data
+              restaurantData: restaurants.data,
+              onPress: this.onPressRestaurant
             });
           }}
         />
@@ -109,4 +116,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps,actions)(Home);
+export default connect(mapStateToProps, actions)(Home);

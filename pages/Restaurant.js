@@ -25,14 +25,16 @@ class Restaurant extends Component {
         <Text>วันที่ : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}</Text>
         <Text>ดาว : {item.reviewRate}</Text>
         <Text>รีวิว : {item.reviewDesc}</Text>
+        <View style={{flexDirection:'row'}}>
         {item.reviewPicturePath.map(e => {
           return (
             <Image
-              style={{ width: 100, height: 65 }}
+              style={{ width: 150, height: 80, margin: 5 }}
               source={{ uri: e }}
             />
           )
         })}
+        </View>
 
       </Card>
     );
@@ -82,7 +84,8 @@ const styles = StyleSheet.create({
     width: 350,
     height: 200,
     margin: 10,
-    alignItems: "center"
+    padding: 10,
+    alignItems: "flex-start"
   }
 });
 
