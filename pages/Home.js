@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ScrollView
+} from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
 import { Card } from "react-native-paper";
@@ -21,30 +28,35 @@ class Home extends Component {
 
   onPressRestaurant(restaurant) {
     Actions.Restaurant({
-      restaurant: restaurant,
+      restaurant: restaurant
     });
   }
 
   renderNavItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => {
-        Actions.Search({
-          restaurantData: this.props.restaurants.data,
-          onPress: this.onPressRestaurant,
-          search: item.restaurantTypeDesc
-        });
-      }}>
-        <Card style={{ margin: 5, width: 80, height: 40, alignItems: 'center' }} elevation={3}>
-          <Text style={{fontSize: 18,opacity: 1}}>{item.restaurantTypeDesc}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          Actions.Search({
+            restaurantData: this.props.restaurants.data,
+            onPress: this.onPressRestaurant,
+            search: item.restaurantTypeDesc
+          });
+        }}
+      >
+        <Card
+          style={{ margin: 5, width: 80, height: 40, alignItems: "center" }}
+          elevation={3}
+        >
+          <Text style={{ fontSize: 18, opacity: 1 }}>
+            {item.restaurantTypeDesc}
+          </Text>
         </Card>
       </TouchableOpacity>
     );
   };
 
   renderItem = ({ item }) => {
-    return (
-      <RestaurantItem item={item} onPress={this.onPressRestaurant} />
-    );
+    return <RestaurantItem item={item} onPress={this.onPressRestaurant} />;
   };
 
   render() {
@@ -56,7 +68,6 @@ class Home extends Component {
     if (restaurantTypes.isRejected) {
       return <Text>Error:{restaurantTypes.data}</Text>;
     }
-
     return (
       <View style={styles.container}>
         <Header
@@ -72,22 +83,22 @@ class Home extends Component {
           {restaurantTypes.isLoading ? (
             <Text>Loading...</Text>
           ) : (
-              <FlatList
-                data={restaurantTypes.data}
-                renderItem={this.renderNavItem}
-                keyExtractor={item => item._id.toString()}
-                horizontal={true}
-              />
-            )}
+            <FlatList
+              data={restaurantTypes.data}
+              renderItem={this.renderNavItem}
+              keyExtractor={item => item._id.toString()}
+              horizontal={true}
+            />
+          )}
           {restaurants.isLoading ? (
             <Text>Loading...</Text>
           ) : (
-              <FlatList
-                data={restaurants.data}
-                renderItem={this.renderItem}
-                keyExtractor={item => item._id.toString()}
-              />
-            )}
+            <FlatList
+              data={restaurants.data}
+              renderItem={this.renderItem}
+              keyExtractor={item => item._id.toString()}
+            />
+          )}
         </ScrollView>
       </View>
     );
@@ -116,4 +127,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(Home);
+export default connect(
+  mapStateToProps,
+  actions
+)(Home);

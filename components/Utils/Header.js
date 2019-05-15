@@ -8,8 +8,6 @@ import {
   StatusBar,
   TouchableOpacity
 } from "react-native";
-import { Font, AppLoading } from "expo";
-import { Actions } from "react-native-router-flux";
 
 // create a component
 class Header extends Component {
@@ -43,8 +41,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     flexDirection: "row",
-    backgroundColor: "#FF8C00",
-    marginTop: StatusBar.currentHeight
+    backgroundColor: "#FF8C00"
+    // marginTop: StatusBar.currentHeight
   },
   subContainerLeft: {
     flex: 0.5,

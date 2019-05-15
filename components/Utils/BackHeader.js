@@ -1,6 +1,13 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  StatusBar
+} from "react-native";
 import { Font, AppLoading } from "expo";
 
 // create a component
@@ -36,8 +43,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     flexDirection: "row",
-    backgroundColor: "#FF8C00"
-    // marginTop: StatusBar.currentHeight,
+    backgroundColor: "#FF8C00",
+    // marginTop: StatusBar.currentHeight
   },
   subContainerLeft: {
     flex: 0.5,

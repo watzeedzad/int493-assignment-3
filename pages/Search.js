@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
@@ -98,7 +98,6 @@ class Search extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
   },
   card: {
     width: 170,

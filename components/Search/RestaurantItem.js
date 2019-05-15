@@ -5,21 +5,28 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  Dimensions
 } from "react-native";
 import { Card } from "react-native-paper";
+
+const deviceWidth = (Dimensions.get("window").width * 90) / 100;
 
 // create a component
 class RestaurantItem extends Component {
   render() {
-    let { restaurantName, restaurantRating, restaurantPicture } = this.props.item;
+    let {
+      restaurantName,
+      restaurantRating,
+      restaurantPicturePath
+    } = this.props.item;
 
     return (
       <View style={styles.container}>
         <Card style={styles.card} elevation={3}>
           <TouchableOpacity onPress={() => this.props.onPress(this.props.item)}>
             <ImageBackground
-              source={{ uri: restaurantPicture }}
+              source={{ uri: restaurantPicturePath }}
               imageStyle={styles.restaurantItemBackground}
               style={styles.restaurantBackground}
             >
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   card: {
-    width: 350,
+    width: deviceWidth,
     height: 200,
     margin: 10
   },

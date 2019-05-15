@@ -23,6 +23,9 @@
     },
     "android": {
       "package": "com.kmutt.sit.kmuttrestaurent"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#FF8C00"
     }
   }
 }
