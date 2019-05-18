@@ -9,7 +9,7 @@ const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 13.6511922;
 const LONGITUDE = 100.4965789;
-const LATITUDE_DELTA = 0.015;
+const LATITUDE_DELTA = 0.007;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 // create a component
@@ -72,7 +72,7 @@ class RestaurantMap extends Component {
           loadingEnabled
           provider="google"
           ref={c => (this.mapView = c)}
-          initialRegion={this.state.latitude ? this.getMapRegion() : null}
+          initialRegion={this.getMapRegion()}
         >
           <Marker.Animated
             ref={marker => {
