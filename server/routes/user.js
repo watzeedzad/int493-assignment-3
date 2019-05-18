@@ -54,6 +54,14 @@ router.post("/login", loginMiddleWare, (req, res) => {
   let loginData = req.loginData;
   let password = req.body.password;
 
+  if (loginData == null) {
+    res.status(500).send({
+      error: true,
+      message: "user not found!"
+    })
+    return;
+  }
+
   let userSaltValue = loginData.salt;
   let userSaltedPassword = loginData.password;
   var sha512 = function(password, salt) {
