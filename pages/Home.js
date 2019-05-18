@@ -5,7 +5,8 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Button
 } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
@@ -99,6 +100,7 @@ class Home extends Component {
               keyExtractor={item => item._id.toString()}
             />
           )}
+          <Button title="Login" onPress={() => Actions.Login()}/>
         </ScrollView>
       </View>
     );
