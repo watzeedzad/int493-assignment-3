@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start-dev": "nodemon ./bin/www --exec babel-node --presets babel-preset-env"
+    "start-dev": "nodemon --exec babel-node ./bin/www"
   },
   "dependencies": {
     "aws-sdk": "^2.441.0",
@@ -24,10 +24,10 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.5",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
     "nodemon": "~1.18.11"
   }
 }
