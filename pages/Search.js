@@ -24,8 +24,9 @@ class Search extends Component {
   }
 
   updateSearch = search => {
+    let lowerCaseSearch = search.toLowerCase();
     this.setState({ search });
-    if (search.length == 0) {
+    if (lowerCaseSearch.length == 0) {
       this.setState({
         filterRestaurantData: []
       });
@@ -34,9 +35,9 @@ class Search extends Component {
       const searchRestaurantResult = restaurantData.filter(restaurant => {
         let { restaurantName, restaurantDesc, restaurantTypeDesc } = restaurant;
         if (
-          restaurantName.includes(search) ||
-          restaurantDesc.includes(search) ||
-          restaurantTypeDesc.includes(search)
+          restaurantName.includes(lowerCaseSearch) ||
+          restaurantDesc.includes(lowerCaseSearch) ||
+          restaurantTypeDesc.includes(lowerCaseSearch)
         ) {
           return restaurant;
         }

@@ -19,17 +19,30 @@ class Routes extends Component {
     return (
       <Router>
         <Scene key="root" hideNavBar hideTabBar>
+          <Scene key="TabBar" tabs={true} hideNavBar>
+            <Scene
+              key="Home"
+              component={HomePage}
+              title={"Home"}
+              initial
+              hideNavBar
+            />
+            <Scene
+              key="UserProfile"
+              component={UserProfilePage}
+              title={"User Profile"}
+              hideNavBar
+            />
+          </Scene>
           <Scene key="Login" component={LoginPage} />
           <Scene key="Register" component={RegisterPage} />
           <Scene key="EditUser" component={EditUserPage} />
-          <Scene key="Home" component={HomePage} initial />
           <Scene key="Restaurant" component={RestaurantPage} />
           <Scene key="RestaurantDetail" component={RestaurantDetailPage} />
           <Scene key="AddRestaurant" component={AddRestaurantPage} />
           <Scene key="ReviewDetail" component={ReviewDetailPage} />
           <Scene key="AddReview" component={AddReviewPage} />
           <Scene key="Search" component={SearchPage} />
-          <Scene key="UserProfile" component={UserProfilePage} />
         </Scene>
       </Router>
     );

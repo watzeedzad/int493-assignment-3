@@ -25,8 +25,16 @@ class RestaurantDetail extends Component {
             />
           </View>
           <View style={styles.restaurantTextInfoContainer}>
+            <Rating
+              imageSize={20}
+              startingValue={1.5}
+              readonly={true}
+              showRating
+              style={{paddingBottom: 5}}
+              fractions={1}
+            />
             <Text>Name : {restaurantName}</Text>
-            <Text>Rating : {restaurantRating}</Text>
+            {/* <Text>Rating : {restaurantRating}</Text> */}
             <Text>Type : {restaurantTypeDesc}</Text>
             <Text>Description : {restaurantDesc}</Text>
           </View>
