@@ -1,5 +1,6 @@
 //import liraries
 import React, { Component } from "react";
+import { Image, View, Dimensions } from "react-native";
 import { Router, Scene } from "react-native-router-flux";
 import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Restaurant";
@@ -12,6 +13,8 @@ import ReviewDetailPage from "../pages/ReviewDetail";
 import SearchPage from "../pages/Search";
 import UserProfilePage from "../pages/UserProfile";
 import AddReviewPage from "../pages/AddReview";
+
+const { width, height } = Dimensions.get("window");
 
 // create a component
 class Routes extends Component {
@@ -26,12 +29,14 @@ class Routes extends Component {
               title={"Home"}
               initial
               hideNavBar
+              icon={HomeIcon}
             />
             <Scene
               key="UserProfile"
               component={UserProfilePage}
               title={"User Profile"}
               hideNavBar
+              icon={UserProfileIcon}
             />
           </Scene>
           <Scene key="Login" component={LoginPage} />
@@ -47,6 +52,36 @@ class Routes extends Component {
       </Router>
     );
   }
+}
+
+function HomeIcon({ focused }) {
+  return (
+    <View>
+      <Image
+        source={require("../assets/utils/home_bottom_icon.png")}
+        style={{
+          width: (width * 6) / 100,
+          height: (width * 6) / 100
+        }}
+        tintColor={focused ? "#1e90ff" : "#D3D3D3"}
+      />
+    </View>
+  );
+}
+
+function UserProfileIcon({ focused }) {
+  return (
+    <View>
+      <Image
+        source={require("../assets/utils/user_bottom_icon.png")}
+        style={{
+          width: (width * 6) / 100,
+          height: (width * 6) / 100
+        }}
+        tintColor={focused ? "#1e90ff" : "#D3D3D3"}
+      />
+    </View>
+  );
 }
 
 //make this component available to the app

@@ -1,7 +1,7 @@
 //import liraries
 import React, { Component } from "react";
 import { View, Button, StyleSheet } from "react-native";
-import t from 'tcomb-form-native';
+import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
 
@@ -9,7 +9,7 @@ const Form = t.form.Form;
 
 const LoginForm = t.struct({
   username: t.String,
-  password: t.String,
+  password: t.String
 });
 
 const formStyles = {
@@ -17,9 +17,14 @@ const formStyles = {
   formGroup: {
     normal: {
       marginBottom: 10,
-      width: 250,
-      formColor: '#FFFFFF'
+      width: 250
+      // formColor: "#696969"
     },
+    error: {
+      marginBottom: 10,
+      width: 250
+      // formColor: "red"
+    }
   },
   textbox: {
     normal: {
@@ -28,68 +33,91 @@ const formStyles = {
       padding: 7,
       borderRadius: 4,
       borderWidth: 1,
+      marginBottom: 5
+      // backgroundColor: "#A9A9A9"
+    },
+    error: {
+      fontSize: 18,
+      height: 36,
+      padding: 7,
+      borderRadius: 4,
+      borderWidth: 1,
       marginBottom: 5,
-      backgroundColor: '#FFFFFF'
+      borderColor: "red"
     }
   },
   controlLabel: {
     normal: {
-      color: '#FFFFFF',
+      // color: "#A9A9A9",
       fontSize: 18,
       marginBottom: 7,
-      fontWeight: '600'
+      fontWeight: "600"
     },
     error: {
-      color: 'red',
+      color: "red",
       fontSize: 18,
       marginBottom: 7,
-      fontWeight: '600'
+      fontWeight: "600"
     }
   }
-}
+};
 
 const options = {
   fields: {
     password: {
       password: true,
       secureTextEntry: true,
+      error: "Password can not empty."
     },
+    username: {
+      error: "Username can not empty."
+    }
   },
-  stylesheet: formStyles,
-}
+  stylesheet: formStyles
+};
 
 // create a component
 class Login extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       value: {
         username: "",
-        password: "",
+        password: ""
       }
     };
-  };
+  }
 
   login() {
     const data = this.refs.form.getValue();
-    this.props.login(data);
+    if (data) {
+      this.props.login(data);
+    }
   }
 
   render() {
+    console.log(this.props.login);
+
+    // if (this.props.login.isRejected) {
+    //   alert("Error occur, Please try again.");
+    //   return;
+    // }
+
     return (
       <View style={styles.container}>
-        {this.props.login.isRejected &&
-        <Text style={{color: 'white', backgroundColor: 'red'}}>{this.props.login.data}</Text>
-        }
+        {this.props.login.isRejected && (
+          <Text style={{ color: "white", backgroundColor: "red" }}>
+            {this.props.login.data}
+          </Text>
+        )}
         <Form
           ref="form"
           type={LoginForm}
           options={options}
           value={this.state.value}
         />
-        <Button title="Login" onPress={()=> this.login()}/>
+        <Button title="Login" onPress={() => this.login()} />
       </View>
     );
   }
@@ -101,14 +129,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF8C00"
+    backgroundColor: "#ffffff"
   }
 });
 
 function mapStateToProps(state) {
   return {
-    login: state.userReducers.login,
+    login: state.userReducers.login
   };
 }
 
-export default connect(mapStateToProps,actions)(Login);
+export default connect(
+  mapStateToProps,
+  actions
+)(Login);

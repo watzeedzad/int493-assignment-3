@@ -100,7 +100,7 @@ class Home extends Component {
               keyExtractor={item => item._id.toString()}
             />
           )}
-          <Button title="Login" onPress={() => Actions.Login()}/>
+          {/* <Button title="Login" onPress={() => Actions.Login()}/> */}
         </ScrollView>
       </View>
     );

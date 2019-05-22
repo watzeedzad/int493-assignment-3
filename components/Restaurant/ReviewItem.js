@@ -30,14 +30,26 @@ class ReviewItem extends Component {
         </Text>
         <Text>ดาว : {item.reviewRate}</Text>
         <Text>รีวิว : {item.reviewDesc}</Text>
-        <View style={{ flexDirection: "row" }}>
-          {item.reviewPicturePath.map(e => {
-            return (
-              <Image
-                style={{ width: 150, height: 80, margin: 5 }}
-                source={{ uri: e }}
-              />
-            );
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center"
+          }}
+        >
+          {item.reviewPicturePath.map((e, index) => {
+            if (index <= 1) {
+              console.log(index);
+              return (
+                <Image
+                  style={{
+                    width: (width * 36) / 100,
+                    height: (height * 14) / 100,
+                    margin: 7
+                  }}
+                  source={{ uri: e }}
+                />
+              );
+            }
           })}
         </View>
       </Card>
