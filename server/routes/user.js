@@ -55,7 +55,7 @@ router.post("/login", loginMiddleWare, (req, res) => {
   let password = req.body.password;
 
   if (loginData == null) {
-    res.status(500).send({
+    res.status(200).send({
       error: true,
       message: "user not found!"
     })

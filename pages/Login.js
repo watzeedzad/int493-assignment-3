@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { View, Button, StyleSheet } from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
+import { Actions } from "react-native-router-flux";
 import * as actions from "../redux/actions";
 
 const Form = t.form.Form;
@@ -93,16 +94,16 @@ class Login extends Component {
     const data = this.refs.form.getValue();
     if (data) {
       this.props.login(data);
+      this.state.value.username = data.username;
+      this.state.value.password = data.password;
     }
   }
 
   render() {
-    console.log(this.props.login);
 
-    // if (this.props.login.isRejected) {
-    //   alert("Error occur, Please try again.");
-    //   return;
-    // }
+    let { login } = this.props;
+
+    console.log(login)
 
     return (
       <View style={styles.container}>

@@ -1,13 +1,13 @@
 import axios from "axios";
 import config from "../../configure";
 import { Actions } from "react-native-router-flux";
-import LocalStorage from "../../Utils/localStorage";
+import { AsyncStorage } from "react-native";
 
 const BASE_URL = config.BASE_URL;
 
 export const login = values => {
   return dispatch => {
-    console.log(values);
+    // console.log(values);
     return axios({
       method: "post",
       url: `${BASE_URL}/user/login`,
@@ -18,9 +18,18 @@ export const login = values => {
       .then(async result => {
         // const decoded = jwt_decode(result);
         // console.log(decode)
-        await LocalStorage.saveStringData("token", result.data);
-        Actions.Home();
-        dispatch({ type: "LOGIN_SUCCESS" });
+        // console.log(result.data);
+        if (result.data.error) {
+          dispatch({
+            type: "LOGIN_REJECTED",
+            payload: result.data.message
+          });
+        } else {
+          await AsyncStorage.setItem("token", result.data.token);
+          Actions.pop();
+          alert("Login Successful")
+          dispatch({ type: "LOGIN_SUCCESS" });
+        }
       })
       .catch(err => {
         //กรณี error
