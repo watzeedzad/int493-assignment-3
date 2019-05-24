@@ -13,6 +13,7 @@ import ReviewDetailPage from "../pages/ReviewDetail";
 import SearchPage from "../pages/Search";
 import UserProfilePage from "../pages/UserProfile";
 import AddReviewPage from "../pages/AddReview";
+import UserManagement from '../pages/UserManagement'
 
 const { width, height } = Dimensions.get("window");
 
@@ -32,9 +33,9 @@ class Routes extends Component {
               icon={HomeIcon}
             />
             <Scene
-              key="UserProfile"
-              component={UserProfilePage}
-              title={"User Profile"}
+              key="UserManagement"
+              component={UserManagement}
+              title={"User Management"}
               hideNavBar
               icon={UserProfileIcon}
             />
@@ -48,6 +49,7 @@ class Routes extends Component {
           <Scene key="ReviewDetail" component={ReviewDetailPage} />
           <Scene key="AddReview" component={AddReviewPage} />
           <Scene key="Search" component={SearchPage} />
+          <Scene key="UserProfile" component={UserProfilePage} />
         </Scene>
       </Router>
     );
@@ -83,6 +85,8 @@ function UserProfileIcon({ focused }) {
     </View>
   );
 }
+
+console.disableYellowBox = true ; // disable Yellow Warning
 
 //make this component available to the app
 export default Routes;
