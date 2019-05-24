@@ -38,3 +38,13 @@ export const login = values => {
       });
   };
 };
+
+export const logout = () => {
+  return dispatch => {
+    async () => {
+      await LocalStorage.removeData("token");
+      Actions.Home();
+      dispatch({ type: 'LOGOUT_SUCCESS' });
+    }
+  }
+}

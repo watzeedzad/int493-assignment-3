@@ -9,6 +9,9 @@ export default (state = initialState, action) => {
         case 'LOGIN_REJECTED':
             return { ...state, login: { data: action.payload, isLoading: false, isRejected: true } }
 
+        case 'LOGOUT_SUCCESS':
+            return { ...state, login: { data: true, isLoading: false, isRejected: false } }
+
         default:
             return state
     }

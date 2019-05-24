@@ -5,7 +5,8 @@ import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";
 import jwtDecode from "jwt-decode";
 import LocalStorage from "../Utils/localStorage";
-
+import { connect } from "react-redux";
+import * as actions from "../redux/actions";
 export class UserManagement extends Component {
     constructor(props) {
         super(props)
@@ -66,7 +67,7 @@ export class UserManagement extends Component {
                             id: 2,
                             iconImage: require('../assets/utils/Logout_icon.png'),
                             text: 'Logout',
-                            onPress: () => console.log("Logout")
+                            onPress: () => this.props.logout()
                         },
                     ]
                 })
@@ -110,4 +111,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserManagement
+export default connect(null,actions)(UserManagement)
