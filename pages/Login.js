@@ -1,11 +1,19 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Button,
+  StyleSheet,
+  Image,
+  Dimensions,
+  AsyncStorage
+} from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import * as actions from "../redux/actions";
 
+const { width, height } = Dimensions.get("window");
 const Form = t.form.Form;
 
 const LoginForm = t.struct({
@@ -90,20 +98,21 @@ class Login extends Component {
     };
   }
 
-  login() {
+  login = () => {
     const data = this.refs.form.getValue();
     if (data) {
       this.props.login(data);
       this.state.value.username = data.username;
       this.state.value.password = data.password;
     }
-  }
+  };
 
   render() {
+    let { loginData } = this.props;
 
-    let { login } = this.props;
-
-    console.log(login)
+    if (loginData.isRejected) {
+      alert(loginData.data.message);
+    }
 
     return (
       <View style={styles.container}>
@@ -112,6 +121,10 @@ class Login extends Component {
             {this.props.login.data}
           </Text>
         )}
+        <Image
+          source={require("../assets/utils/logo-kmutt.png")}
+          style={{ height: (height * 30) / 100, resizeMode: "contain" }}
+        />
         <Form
           ref="form"
           type={LoginForm}
@@ -135,8 +148,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  console.log(state.userReducers.login);
+  const { userReducers } = state;
   return {
-    login: state.userReducers.login
+    loginData: userReducers.login
   };
 }
 

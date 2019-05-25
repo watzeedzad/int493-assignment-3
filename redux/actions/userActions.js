@@ -22,13 +22,14 @@ export const login = values => {
         if (result.data.error) {
           dispatch({
             type: "LOGIN_REJECTED",
-            payload: result.data.message
+            payload: result.data
           });
         } else {
-          await AsyncStorage.setItem("token", result.data.token);
-          Actions.pop();
-          alert("Login Successful")
-          dispatch({ type: "LOGIN_SUCCESS" });
+          await AsyncStorage.setItem("token", result.data.token).then(() => {
+            Actions.pop();
+            alert("Login Successful");
+            dispatch({ type: "LOGIN_SUCCESS" });
+          });
         }
       })
       .catch(err => {
@@ -42,9 +43,10 @@ export const login = values => {
 export const logout = () => {
   return dispatch => {
     async () => {
-      await LocalStorage.removeData("token");
-      Actions.Home();
-      dispatch({ type: 'LOGOUT_SUCCESS' });
-    }
-  }
-}
+      await AsyncStorage.removeItem("token").then(() => {
+        Actions.Home();
+        dispatch({ type: "LOGOUT_SUCCESS" });
+      });
+    };
+  };
+};

@@ -97,7 +97,7 @@ router.post("/login", loginMiddleWare, (req, res) => {
       token: "bearer " + jwtToken
     });
   } else {
-    res.status(401).send({
+    res.status(200).send({
       error: true,
       message: "wrong username or password"
     });
