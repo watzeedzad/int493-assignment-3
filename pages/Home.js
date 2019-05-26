@@ -6,14 +6,16 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
-  Button
+  Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
 import { Card } from "react-native-paper";
 import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";
-import RestaurantItem from "../components/Search/RestaurantItem";
+import RestaurantGridItem from "../components/Home/RestaurantGridItem";
+
+const { width, height } = Dimensions.get("screen");
 
 class Home extends Component {
   constructor(props) {
@@ -57,7 +59,7 @@ class Home extends Component {
   };
 
   renderItem = ({ item }) => {
-    return <RestaurantItem item={item} onPress={this.onPressRestaurant} />;
+    return <RestaurantGridItem item={item} onPress={this.onPressRestaurant} />;
   };
 
   render() {
@@ -98,6 +100,8 @@ class Home extends Component {
               data={restaurants.data}
               renderItem={this.renderItem}
               keyExtractor={item => item._id.toString()}
+              numColumns={2}
+              style={{ width: width }}
             />
           )}
           {/* <Button title="Login" onPress={() => Actions.Login()}/> */}
