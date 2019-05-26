@@ -6,14 +6,16 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
-  Button
+  Dimensions
 } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
 import { Card } from "react-native-paper";
 import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";
-import RestaurantItem from "../components/Search/RestaurantItem";
+import RestaurantGridItem from "../components/Home/RestaurantGridItem";
+
+const { width, height } = Dimensions.get("screen");
 
 class Home extends Component {
   constructor(props) {
@@ -44,20 +46,22 @@ class Home extends Component {
           });
         }}
       >
-        <Card
-          style={{ margin: 5, width: 80, height: 40, alignItems: "center" }}
-          elevation={3}
-        >
+        {/* <Card style={styles.navCardItem} elevation={10}>
           <Text style={{ fontSize: 18, opacity: 1 }}>
             {item.restaurantTypeDesc}
           </Text>
-        </Card>
+        </Card> */}
+        <View style={styles.navCardItem}>
+          <Text style={{ fontSize: 18, opacity: 1, color: "black" }}>
+            {item.restaurantTypeDesc}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
 
   renderItem = ({ item }) => {
-    return <RestaurantItem item={item} onPress={this.onPressRestaurant} />;
+    return <RestaurantGridItem item={item} onPress={this.onPressRestaurant} />;
   };
 
   render() {
@@ -88,6 +92,7 @@ class Home extends Component {
               data={restaurantTypes.data}
               renderItem={this.renderNavItem}
               keyExtractor={item => item._id.toString()}
+              style={{ backgroundColor: "white", width: width }}
               horizontal={true}
             />
           )}
@@ -98,6 +103,8 @@ class Home extends Component {
               data={restaurants.data}
               renderItem={this.renderItem}
               keyExtractor={item => item._id.toString()}
+              numColumns={2}
+              style={{ width: width }}
             />
           )}
           {/* <Button title="Login" onPress={() => Actions.Login()}/> */}
@@ -119,6 +126,19 @@ const styles = StyleSheet.create({
     height: 200,
     margin: 10,
     alignItems: "center"
+  },
+  navCardItem: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    width: (width * 20) / 100,
+    height: (width * 15) / 100,
+    flexWrap: "wrap"
+    // borderRadius: 3,
+    // borderColor: "white",
+    // backgroundColor: "white",
+    // borderLeftWidth: 2,
+    // borderRightWidth: 2
   }
 });
 

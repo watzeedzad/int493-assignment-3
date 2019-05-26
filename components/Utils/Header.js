@@ -21,7 +21,7 @@ class Header extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.subContainerLeft}>
-          <Text style={styles.titleText}> {this.props.titleText} </Text>
+          <Text style={styles.titleText}>{this.props.titleText}</Text>
         </View>
         <View style={styles.subContainerRight}>
           <TouchableOpacity onPress={this.props.onPress}>
@@ -45,11 +45,11 @@ const styles = StyleSheet.create({
     // marginTop: StatusBar.currentHeight
   },
   subContainerLeft: {
-    flex: 0.5,
+    flex: 0.7,
     flexDirection: "row"
   },
   subContainerRight: {
-    flex: 0.5,
+    flex: 0.3,
     flexDirection: "row-reverse"
   },
   titleText: {
