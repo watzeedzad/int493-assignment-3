@@ -25,23 +25,43 @@ class ReviewItem extends Component {
   renderItem = ({ item }) => {
     return (
       <Card style={styles.card} elevation={10}>
-        <Rating
-          type="star"
-          imageSize={15}
-          startingValue={item.reviewRate}
-          readonly={true}
-          fractions={1}
-          style={{
-            flex: 0,
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            paddingBottom: 5
-          }}
-        />
-        <Text>
+        <View style={{ flex: 0, flexDirection: "row" }}>
+          <Image
+            source={{ uri: item.userPicturePath[0] }}
+            style={{
+              borderRadius: 150 / 2,
+              width: (width * 15) / 100,
+              height: (width * 15) / 100
+            }}
+          />
+          <View style={{ flex: 0, flexDirection: "column", paddingLeft: 10 }}>
+            <Text>
+              {item.firstname[0]} {item.lastname[0]}
+            </Text>
+            <Text>
+              {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
+            </Text>
+            <Rating
+              type="star"
+              imageSize={15}
+              startingValue={item.reviewRate}
+              readonly={true}
+              fractions={1}
+              style={{
+                paddingTop: 3,
+                flex: 0,
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            />
+          </View>
+        </View>
+        {/* <Text>
           Review Date : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
-        </Text>
-        <Text>Description : {item.reviewDesc}</Text>
+        </Text> */}
+        <View style={{ paddingTop: 10 }}>
+          <Text>{item.reviewDesc}</Text>
+        </View>
         <View
           style={{
             flexDirection: "row",

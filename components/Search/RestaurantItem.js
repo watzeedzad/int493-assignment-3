@@ -23,7 +23,7 @@ class RestaurantItem extends Component {
 
     return (
       <View style={styles.container}>
-        <Card style={styles.card} elevation={3}>
+        <Card style={styles.card} elevation={10}>
           <TouchableOpacity onPress={() => this.props.onPress(this.props.item)}>
             <ImageBackground
               source={{ uri: restaurantPicturePath }}
@@ -58,11 +58,12 @@ const styles = StyleSheet.create({
   },
   restaurantItemBackground: {
     resizeMode: "cover",
-    opacity: 0.4
+    opacity: 0.4,
+    borderRadius: 3
   },
   restaurantBackground: {
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   restaurantLabel: {
     fontSize: 18,
