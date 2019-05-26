@@ -1,14 +1,163 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Button, StyleSheet, ScrollView } from "react-native";
+import t from "tcomb-form-native";
+import { connect } from "react-redux";
+import { Actions } from "react-native-router-flux";
+import * as actions from "../redux/actions";
+import { ImagePicker } from 'expo';
+import { Avatar } from "react-native-elements";
 
-// create a component
+const Form = t.form.Form;
+
+const UserForm = t.struct({
+  username: t.String,
+  password: t.String,
+  email: t.String,
+  firstname: t.String,
+  lastname: t.String,
+  tel: t.String
+});
+
+const formStyles = {
+  ...Form.stylesheet, // copy over all of the default styles
+  formGroup: {
+    normal: {
+      marginBottom: 10,
+      width: 250
+      // formColor: "#696969"
+    },
+    error: {
+      marginBottom: 10,
+      width: 250
+      // formColor: "red"
+    }
+  },
+  textbox: {
+    normal: {
+      fontSize: 18,
+      height: 36,
+      padding: 7,
+      borderRadius: 4,
+      borderWidth: 1,
+      marginBottom: 5
+      // backgroundColor: "#A9A9A9"
+    },
+    error: {
+      fontSize: 18,
+      height: 36,
+      padding: 7,
+      borderRadius: 4,
+      borderWidth: 1,
+      marginBottom: 5,
+      borderColor: "red"
+    }
+  },
+  controlLabel: {
+    normal: {
+      // color: "#A9A9A9",
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    },
+    error: {
+      color: "red",
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    }
+  }
+};
+
+const options = {
+  fields: {
+    password: {
+      password: true,
+      secureTextEntry: true,
+      error: "Password can not empty."
+    },
+    username: {
+      error: "Username can not empty."
+    },
+    email: {
+      error: "E-mail can not empty."
+    },
+    firstname: {
+      error: "Firstname can not empty."
+    },
+    lastname: {
+      error: "Lastname can not empty."
+    }
+  },
+  stylesheet: formStyles
+};
+
 class EditUser extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: {
+        username: "",
+        password: "",
+        email: "",
+        firstname: "",
+        lastname: "",
+        tel: "",
+        userPicturePath: null
+      }
+    };
+  }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      base64: true,
+      exif: true
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ userPicturePath: result.uri });
+    }
+  };
+
+  _register = () => {
+    const item = this.refs.form.getValue();
+    console.log(item)
+    if (item == null) {
+      alert('Please enter your information.')
+    } else {
+      this.props.register(this.state.userPicturePath, item)
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>EditUser</Text>
-      </View>
+      <View>
+        <ScrollView>
+          <View style={styles.container}>
+            <Avatar
+              source={{ uri: this.state.userPicturePath }}
+              size="xlarge"
+              rounded
+              title="PIC"
+              onPress={() => this._pickImage()}
+              activeOpacity={0.7}
+              showEditButton={true}
+            />
+            <Form
+              ref="form"
+              type={UserForm}
+              options={options}
+              value={this.state.value}
+            />
+            <Button style={{ height: 36 }} title="Register" onPress={() => this._register()} />
+          </View>
+        </ScrollView>
+      </View >
     );
   }
 }
@@ -17,11 +166,18 @@ class EditUser extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 15,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#2c3e50"
+    backgroundColor: "#ffffff"
   }
 });
 
+function mapStateToProps(state) {
+  return {
+    register: state.userReducers.register
+  };
+}
+
 //make this component available to the app
-export default EditUser;
+export default connect(mapStateToProps, actions)(EditUser);

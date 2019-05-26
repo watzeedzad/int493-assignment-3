@@ -50,3 +50,49 @@ export const logout = () => {
     };
   };
 };
+
+export const register = (uri, item) => {
+  let fileType
+  let uriParts
+  if (uri) {
+    uriParts = uri.split('.');
+    fileType = uriParts[uriParts.length - 1];
+  }
+
+  const formData = new FormData();
+  if (uri) {
+    formData.append('profilePicture', {
+      uri,
+      name: `profilePicture.${fileType}`,
+      type: `image/${fileType}`,
+    });
+  }else{
+    formData.append('profilePicture', null);
+  }
+  formData.append('username', item.username);
+  formData.append('password', item.password);
+  formData.append('email', item.email);
+  formData.append('firstname', item.firstname);
+  formData.append('lastname', item.lastname);
+  formData.append('tel', item.tel);
+
+  return dispatch => {
+    return axios({
+      method: "post",
+      url: `${BASE_URL}/user/register`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true
+    }).then(results => {
+      if (results.data.error) {
+        dispatch({ type: 'REGISTER_REJECTED', payload: results.data.errorMessage })
+      } else {
+        alert('Register success.')
+        Actions.pop();
+        dispatch({ type: 'REGISTER_SUCCESS' })
+      }
+    }).catch(err => {
+      dispatch({ type: 'REGISTER_REJECTED', payload: err.message })
+    })
+  };
+};
