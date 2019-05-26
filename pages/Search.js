@@ -1,11 +1,20 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+  Image
+} from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
 import RestaurantItem from "../components/Search/RestaurantItem";
 import { Card } from "react-native-paper";
+import AddRestaurant from "../components/Search/AddRestaurant";
 
 // create a component
 class Search extends Component {
@@ -49,9 +58,7 @@ class Search extends Component {
   };
 
   _restaurantListRenderItem = ({ item }) => {
-    return (
-      <RestaurantItem item={item} onPress={this.props.onPress} />
-    );
+    return <RestaurantItem item={item} onPress={this.props.onPress} />;
   };
 
   _restaurantListKeyExtractor = item => item._id.toString();
@@ -81,14 +88,15 @@ class Search extends Component {
             renderItem={this._restaurantListRenderItem}
             keyExtractor={this._restaurantListKeyExtractor}
           />
-          <Card style={styles.card} elevation={3}>
+          {/* <Card style={styles.card} elevation={3}>
             <TouchableOpacity>
               <Image
                 style={{ width: 150, height: 150, margin:10 }}
                 source={{ uri: 'https://www.iconsdb.com/icons/preview/orange/add-xxl.png' }}
               />
             </TouchableOpacity>
-          </Card>
+          </Card> */}
+          <AddRestaurant />
         </ScrollView>
       </View>
     );
@@ -98,15 +106,15 @@ class Search extends Component {
 // define your styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   card: {
     width: 170,
     height: 170,
     margin: 10,
-    alignSelf: 'center',
-    alignItems: 'center'
-  },
+    alignSelf: "center",
+    alignItems: "center"
+  }
 });
 
 //make this component available to the app
