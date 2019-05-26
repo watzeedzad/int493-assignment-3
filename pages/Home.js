@@ -46,14 +46,16 @@ class Home extends Component {
           });
         }}
       >
-        <Card
-          style={{ margin: 5, width: 80, height: 40, alignItems: "center" }}
-          elevation={3}
-        >
+        {/* <Card style={styles.navCardItem} elevation={10}>
           <Text style={{ fontSize: 18, opacity: 1 }}>
             {item.restaurantTypeDesc}
           </Text>
-        </Card>
+        </Card> */}
+        <View style={styles.navCardItem}>
+          <Text style={{ fontSize: 18, opacity: 1, color: "black" }}>
+            {item.restaurantTypeDesc}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -90,6 +92,7 @@ class Home extends Component {
               data={restaurantTypes.data}
               renderItem={this.renderNavItem}
               keyExtractor={item => item._id.toString()}
+              style={{ backgroundColor: "white", width: width }}
               horizontal={true}
             />
           )}
@@ -123,6 +126,19 @@ const styles = StyleSheet.create({
     height: 200,
     margin: 10,
     alignItems: "center"
+  },
+  navCardItem: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    width: (width * 20) / 100,
+    height: (width * 15) / 100,
+    flexWrap: "wrap"
+    // borderRadius: 3,
+    // borderColor: "white",
+    // backgroundColor: "white",
+    // borderLeftWidth: 2,
+    // borderRightWidth: 2
   }
 });
 
