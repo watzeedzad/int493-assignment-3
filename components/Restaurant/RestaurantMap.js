@@ -20,27 +20,26 @@ class RestaurantMap extends Component {
     this.state = {
       latitude: null,
       longitude: null,
-      coordinate: new AnimatedRegion({
-        latitude: this.props.restaurant.restaurantLat,
-        longitude: this.props.restaurant.restaurantLong
-      })
+      coordinate: null
     };
   }
 
   componentDidMount = () => {
-    this.setDestination();
+    if (this.props.restaurant) {
+      this.setDestination();
+    }
   };
 
   setDestination = () => {
     const { restaurantLat, restaurantLong } = this.props.restaurant;
-    const latitude = restaurantLat;
-    const longitude = restaurantLong;
 
     this.setState({
-      destination: {
-        latitude,
-        longitude
-      }
+      latitude: restaurantLat,
+      longitude: restaurantLong,
+      coordinate: new AnimatedRegion({
+        latitude: this.props.restaurant.restaurantLat,
+        longitude: this.props.restaurant.restaurantLong
+      })
     });
 
     this.watchLocation(restaurantLat, restaurantLong);
@@ -64,22 +63,39 @@ class RestaurantMap extends Component {
     longitudeDelta: LONGITUDE_DELTA
   });
 
+  setMarker = (event) => {
+    if (!this.props.restaurant) {
+      const { latitude, longitude } = event.nativeEvent.coordinate
+      this.props.setAddress(latitude,longitude)
+      this.setState({
+        latitude: latitude,
+        longitude: longitude,
+        coordinate: new AnimatedRegion({
+          latitude: latitude,
+          longitude: longitude
+        })
+      });
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
+          onPress={(event) => this.setMarker(event)}
           loadingEnabled
           provider="google"
           ref={c => (this.mapView = c)}
           initialRegion={this.getMapRegion()}
         >
-          <Marker.Animated
-            ref={marker => {
-              this.marker = marker;
-            }}
-            coordinate={this.state.coordinate}
-          />
+          {this.state.coordinate &&
+            <Marker.Animated
+              ref={marker => {
+                this.marker = marker;
+              }}
+              coordinate={this.state.coordinate}
+            />}
         </MapView>
       </View>
     );

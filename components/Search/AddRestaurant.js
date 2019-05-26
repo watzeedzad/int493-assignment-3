@@ -21,7 +21,7 @@ class AddRestaurant extends Component {
   }
 
   addRestaurant = () => {
-    console.log("add restaurant");
+    Actions.AddRestaurant({})
   };
 
   render() {

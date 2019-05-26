@@ -1,6 +1,7 @@
 const initialState = {
     restaurants: { data: null, isLoading: true, isRejected: false },
     restaurantTypes: { data: null, isLoading: true, isRejected: false },
+    addRestaurant: { data: null, isLoading: true, isRejected: false },
 }
 
 export default (state = initialState, action) => {
@@ -18,6 +19,11 @@ export default (state = initialState, action) => {
             return { ...state, restaurantTypes: { data: action.payload, isLoading: false, isRejected: false } }
         case 'LOAD_RESTAURANTTYPES_REJECTED':
             return { ...state, restaurantTypes: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'ADD_RESTAURANT_SUCCESS':
+            return { ...state, addRestaurant: { data: true, isLoading: false, isRejected: false } }
+        case 'ADD_RESTAURANT_REJECTED':
+            return { ...state, addRestaurant: { data: action.payload, isLoading: false, isRejected: true } }
 
         default:
             return state

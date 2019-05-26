@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { View, Button, StyleSheet, ScrollView } from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
-import { Actions } from "react-native-router-flux";
 import * as actions from "../redux/actions";
 import { ImagePicker } from 'expo';
 import { Avatar } from "react-native-elements";
@@ -25,12 +24,10 @@ const formStyles = {
     normal: {
       marginBottom: 10,
       width: 250
-      // formColor: "#696969"
     },
     error: {
       marginBottom: 10,
       width: 250
-      // formColor: "red"
     }
   },
   textbox: {
@@ -41,7 +38,6 @@ const formStyles = {
       borderRadius: 4,
       borderWidth: 1,
       marginBottom: 5
-      // backgroundColor: "#A9A9A9"
     },
     error: {
       fontSize: 18,
@@ -55,7 +51,6 @@ const formStyles = {
   },
   controlLabel: {
     normal: {
-      // color: "#A9A9A9",
       fontSize: 18,
       marginBottom: 7,
       fontWeight: "600"
@@ -104,7 +99,7 @@ class EditUser extends Component {
         firstname: "",
         lastname: "",
         tel: "",
-        userPicturePath: null
+        userPicture: null
       }
     };
   }
@@ -113,24 +108,19 @@ class EditUser extends Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      base64: true,
-      exif: true
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      this.setState({ userPicturePath: result.uri });
+      this.setState({ userPicture: result.uri });
     }
   };
 
   _register = () => {
     const item = this.refs.form.getValue();
-    console.log(item)
     if (item == null) {
       alert('Please enter your information.')
     } else {
-      this.props.register(this.state.userPicturePath, item)
+      this.props.register(this.state.userPicture, item)
     }
   }
 
@@ -140,7 +130,7 @@ class EditUser extends Component {
         <ScrollView>
           <View style={styles.container}>
             <Avatar
-              source={{ uri: this.state.userPicturePath }}
+              source={{ uri: this.state.userPicture }}
               size="xlarge"
               rounded
               title="PIC"
@@ -162,7 +152,6 @@ class EditUser extends Component {
   }
 }
 
-// define your styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -179,5 +168,4 @@ function mapStateToProps(state) {
   };
 }
 
-//make this component available to the app
 export default connect(mapStateToProps, actions)(EditUser);

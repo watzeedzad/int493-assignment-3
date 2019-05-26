@@ -1,5 +1,7 @@
 import axios from 'axios'
 import config from '../../configure'
+import { AsyncStorage } from "react-native";
+import { Actions } from "react-native-router-flux";
 
 const BASE_URL = config.BASE_URL
 
@@ -38,3 +40,56 @@ export const loadRestaurantTypes = () => {
         })
     }
 }
+
+export const addRestaurant = (uri, item) => {
+    let fileType
+    let uriParts
+    if (uri) {
+      uriParts = uri.split('.');
+      fileType = uriParts[uriParts.length - 1];
+    }
+  
+    const formData = new FormData();
+    if (uri) {
+      formData.append('restaurantPicture', {
+        uri,
+        name: `restaurantPicture.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    }else{
+      formData.append('restaurantPicture', null);
+    }
+    formData.append('restaurantName', item.restaurantName);
+    formData.append('restaurantOpenTime', item.restaurantOpenTime);
+    formData.append('restaurantCloseTime', item.restaurantCloseTime);
+    formData.append('restaurantOpenDate', item.restaurantOpenDate);
+    formData.append('restaurantDesc', item.restaurantDesc);
+    formData.append('restaurantLat', item.restaurantLat);
+    formData.append('restaurantLong', item.restaurantLong);
+    formData.append('restaurantTypeId', item.restaurantTypeId);
+    formData.append('restaurantAddress', item.restaurantAddress);
+    formData.append('restaurantTel', item.restaurantTel);
+  
+    return async dispatch => {
+      return axios({
+        method: "post",
+        url: `${BASE_URL}/restaurant/addRestaurant`,
+        data: formData,
+        headers: { 
+            "Content-Type": "multipart/form-data",
+            'authorization': await AsyncStorage.getItem("token")
+        },
+        withCredentials: true
+      }).then(results => {
+        if (results.data.error) {
+          dispatch({ type: 'ADD_RESTAURANT_REJECTED', payload: results.data.message })
+        } else {
+          alert('Add restaurant success.')
+          Actions.pop();
+          dispatch({ type: 'ADD_RESTAURANT_SUCCESS' })
+        }
+      }).catch(err => {
+        dispatch({ type: 'ADD_RESTAURANT_REJECTED', payload: err.message })
+      })
+    };
+  };
