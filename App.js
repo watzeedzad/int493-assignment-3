@@ -9,7 +9,7 @@ import thunk from "redux-thunk";
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
-console.disableYellowBox = true;
+// console.disableYellowBox = true;
 
 export default class App extends React.Component {
   render() {
