@@ -119,7 +119,7 @@ router.post(
   "/addReview",
   uploadToS3.array("reviewPicture"),
   async (req, res) => {
-    let userId = req.user.sub;
+    let userId = req.user.userId;
     let reviewPicturePath = [];
     let { restaurantId, reviewRate, reviewDesc } = req.body;
 

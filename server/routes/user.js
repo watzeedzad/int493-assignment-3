@@ -18,11 +18,14 @@ const uploadToS3 = multer({
   storage: multer_s3({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
+    acl: "public-read",
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, "photos/" + Date.now().toString());
+      let fileMimeType = file.mimetype.split("/");
+      let fileExtension = fileMimeType[1];
+      cb(null, "photos/users/" + Date.now().toString() + "." + fileExtension);
     }
   })
 });
@@ -134,7 +137,7 @@ router.post("/register", (req, res) => {
   if (typeof req.file === "undefined") {
     profilePicturePath = null;
   } else {
-    profilePicturePath = req.file.key;
+    profilePicturePath = req.file.location;
   }
   isUserExist(username, isUserExist => {
     if (isUserExist) {

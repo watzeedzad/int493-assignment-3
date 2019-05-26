@@ -35,8 +35,7 @@ class ReviewItem extends Component {
             flex: 0,
             flexDirection: "row",
             justifyContent: "flex-start",
-            color: "#DCDCDC",
-            paddingBottom: 5,
+            paddingBottom: 5
           }}
         />
         <Text>
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingTop: 10,
     paddingLeft: 10,
-    paddingRight: 10,
+    paddingRight: 10
     // backgroundColor: "#DCDCDC"
     // alignItems: "flex-start"
   }
