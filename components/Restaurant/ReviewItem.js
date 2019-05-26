@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import moment from "moment";
 import { Card } from "react-native-paper";
+import { Rating } from "react-native-ratings";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,13 +24,25 @@ class ReviewItem extends Component {
 
   renderItem = ({ item }) => {
     return (
-      <Card style={styles.card} elevation={3}>
-        <Text style={{ alignSelf: "center" }}>รีวิว</Text>
+      <Card style={styles.card} elevation={10}>
+        <Rating
+          type="star"
+          imageSize={15}
+          startingValue={item.reviewRate}
+          readonly={true}
+          fractions={1}
+          style={{
+            flex: 0,
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            color: "#DCDCDC",
+            paddingBottom: 5,
+          }}
+        />
         <Text>
-          วันที่ : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
+          Review Date : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
         </Text>
-        <Text>ดาว : {item.reviewRate}</Text>
-        <Text>รีวิว : {item.reviewDesc}</Text>
+        <Text>Description : {item.reviewDesc}</Text>
         <View
           style={{
             flexDirection: "row",
@@ -41,6 +54,7 @@ class ReviewItem extends Component {
               console.log(index);
               return (
                 <Image
+                  key={index}
                   style={{
                     width: (width * 36) / 100,
                     height: (height * 14) / 100,
@@ -55,8 +69,6 @@ class ReviewItem extends Component {
       </Card>
     );
   };
-
-  keyExtractor = _id => _id.toString();
 
   render() {
     let { reviews } = this.props;
@@ -79,7 +91,7 @@ class ReviewItem extends Component {
           <FlatList
             data={reviews.data}
             renderItem={this.renderItem}
-            keyExtractor={this.keyExtractor}
+            keyExtractor={item => item._id.toString()}
           />
         )}
       </View>
@@ -93,19 +105,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     marginTop: 10,
     width: width
     // padding: 10
   },
   card: {
     width: (width * 85) / 100,
-    height: 200,
+    height: (height * 33) / 100,
     margin: 10,
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: "#DCDCDC"
+    // backgroundColor: "#DCDCDC"
     // alignItems: "flex-start"
   }
 });

@@ -2,6 +2,7 @@ let express = require("express");
 let router = express.Router();
 let review = require("../model/Review");
 let user = require("../model/User");
+let restaurant = require("../model/Restaurant");
 const passport = require("passport");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -134,6 +135,8 @@ router.post(
       return;
     }
 
+    restaurantId = parseInt(restaurantId);
+
     if (typeof req.files !== "undefined") {
       req.files.forEach(value => {
         reviewPicturePath.push(value.location);
@@ -146,19 +149,48 @@ router.post(
       reviewRate,
       reviewDesc,
       reviewPicturePath,
-      (errorStatus, addReviewResultData) => {
+      async (errorStatus, addReviewResultData) => {
         if (errorStatus) {
-          res.status(500).send({
+          res.status(200).send({
             error: true,
-            message: "error occur while adding new review"
+            message: "error occur while adding new review 1"
           });
           return;
         } else {
-          res.status(200).send({
-            error: false,
-            review: addReviewResultData
-          });
-          return;
+          await getAvgRestaurantRating(
+            restaurantId,
+            async (
+              getAvgRestaurantRatingStatus,
+              getAvgRestaurantRatingData
+            ) => {
+              if (getAvgRestaurantRatingStatus) {
+                res.status(200).send({
+                  error: true,
+                  message: "error occur while adding new review 2"
+                });
+                return;
+              } else {
+                await updateRestaurantRating(
+                  getAvgRestaurantRatingData[0],
+                  updateRatingStatus => {
+                    if (updateRatingStatus) {
+                      res.status(200).send({
+                        error: true,
+                        message: "error occur while adding new review 3"
+                      });
+                      return;
+                    } else {
+                      res.status(200).send({
+                        error: false,
+                        review: addReviewResultData
+                      });
+                      return;
+                    }
+                  }
+                );
+              }
+            }
+          );
         }
       }
     );
@@ -200,10 +232,37 @@ async function addReview(
 
 async function getRestaurantReviews(restaurantId, callback) {
   try {
-    await review.find(
-      {
-        restaurantId: restaurantId
-      },
+    await review.aggregate(
+      [
+        {
+          $match: {
+            restaurantId: restaurantId
+          }
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "userId",
+            as: "userInfo"
+          }
+        },
+        {
+          $project: {
+            reviewId: 1,
+            userId: 1,
+            firstname: "$userInfo.firstname",
+            lastname: "$userInfo.lastname",
+            email: "$userInfo.email",
+            userPicturePath: "$userInfo.userPicturePath",
+            restaurantId: 1,
+            reviewRate: 1,
+            reviewDesc: 1,
+            reviewPicturePath: 1,
+            reviewDate: 1
+          }
+        }
+      ],
       (err, result) => {
         if (err) {
           console.log(err);
@@ -218,6 +277,68 @@ async function getRestaurantReviews(restaurantId, callback) {
   } catch (error) {
     console.log(error);
     console.log(true, []);
+  }
+}
+
+async function getAvgRestaurantRating(restaurantId, callback) {
+  try {
+    await review.aggregate(
+      [
+        {
+          $match: {
+            restaurantId: restaurantId
+          }
+        },
+        {
+          $group: {
+            _id: "$restaurantId",
+            avgRating: {
+              $avg: "$reviewRate"
+            }
+          }
+        }
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          callback(true, []);
+        } else if (!result) {
+          callback(true, []);
+        } else {
+          callback(false, result);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    console.log(true, []);
+  }
+}
+
+async function updateRestaurantRating({ _id, avgRating }, callback) {
+  try {
+    await restaurant.findOneAndUpdate(
+      {
+        restaurantId: _id
+      },
+      {
+        $set: {
+          restaurantRating: avgRating
+        }
+      },
+      (err, doc) => {
+        if (err) {
+          callback(true);
+        } else if (!doc) {
+          callback(true);
+        } else {
+          callback(false);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    callback(false);
   }
 }
 

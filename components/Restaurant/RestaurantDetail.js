@@ -27,9 +27,8 @@ class RestaurantDetail extends Component {
           <View style={styles.restaurantTextInfoContainer}>
             <Rating
               imageSize={20}
-              startingValue={1.5}
+              startingValue={restaurantRating}
               readonly={true}
-              showRating
               style={{paddingBottom: 5}}
               fractions={1}
             />
