@@ -1,7 +1,14 @@
 //import liraries
 import React, { Component } from "react";
-import { StyleSheet, Dimensions, View, Button, ScrollView, Image } from 'react-native';
-import ImageBrowser from '../components/Review/ImageBrowser';
+import {
+  StyleSheet,
+  Dimensions,
+  View,
+  Button,
+  ScrollView,
+  Image
+} from "react-native";
+import ImageBrowser from "../components/Review/ImageBrowser";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import { Rating } from "react-native-ratings";
@@ -14,7 +21,7 @@ import { Actions } from "react-native-router-flux";
 const Form = t.form.Form;
 
 const ReviewForm = t.struct({
-  reviewDesc: t.String,
+  reviewDesc: t.String
 });
 
 const formStyles = {
@@ -78,7 +85,7 @@ const multilineStyle = {
       width: 250
     }
   }
-}
+};
 
 const options = {
   fields: {
@@ -86,8 +93,8 @@ const options = {
       label: "Description",
       error: "Description can not empty.",
       multiline: true,
-      stylesheet: multilineStyle,
-    },
+      stylesheet: multilineStyle
+    }
   },
   stylesheet: formStyles
 };
@@ -102,46 +109,46 @@ class AddReview extends Component {
       restaurantId: this.props.restaurantId,
       reviewRate: 0,
       reviewDesc: ""
-    }
+    };
   }
-  imageBrowserCallback = (callback) => {
-    callback.then((photos) => {
-      console.log(photos)
-      this.setState({
-        imageBrowserOpen: false,
-        photos
+  imageBrowserCallback = callback => {
+    callback
+      .then(photos => {
+        console.log(photos);
+        this.setState({
+          imageBrowserOpen: false,
+          photos
+        });
       })
-    }).catch((e) => console.log(e))
-  }
+      .catch(e => console.log(e));
+  };
 
   _addReview = () => {
-    const { photos, restaurantId, reviewRate } = this.state
+    const { photos, restaurantId, reviewRate } = this.state;
     const data = this.refs.form.getValue();
-    this.props.addReview(photos, restaurantId, reviewRate, data.reviewDesc)
-  }
+    this.props.addReview(photos, restaurantId, reviewRate, data.reviewDesc);
+  };
 
   renderImage(item, i) {
     return (
-      <Image
-        style={{ height: 100, width: 100 }}
-        source={{ uri: item.file }}
-        key={i}
-      />
-    )
+      <View style={{ padding: 10 }}>
+        <Image
+          style={{ height: 100, width: 100 }}
+          source={{ uri: item.file }}
+          key={i}
+        />
+      </View>
+    );
   }
 
   render() {
     if (this.state.imageBrowserOpen) {
-      return (<ImageBrowser max={4} callback={this.imageBrowserCallback} />);
+      return <ImageBrowser max={4} callback={this.imageBrowserCallback} />;
     }
     return (
       <ScrollView>
-        <BackHeader
-          titleText={"Add Review"}
-          onPress={() => Actions.pop()}
-        />
+        <BackHeader titleText={"Add Review"} onPress={() => Actions.pop()} />
         <View style={styles.container}>
-
           <Avatar
             source={{ uri: this.props.restaurantPicture }}
             size="xlarge"
@@ -152,13 +159,13 @@ class AddReview extends Component {
             type="star"
             imageSize={40}
             startingValue={this.state.reviewRate}
-            onFinishRating={(reviewRate) => this.setState({ reviewRate })}
+            onFinishRating={reviewRate => this.setState({ reviewRate })}
             fractions={1}
             style={{
               paddingTop: 12,
               flex: 0,
               flexDirection: "row",
-              justifyContent: "flex-start",
+              justifyContent: "flex-start"
             }}
           />
 
@@ -166,7 +173,7 @@ class AddReview extends Component {
             ref="form"
             type={ReviewForm}
             options={options}
-            onChange={(reviewDesc) => this.setState({ reviewDesc: reviewDesc })}
+            onChange={reviewDesc => this.setState({ reviewDesc: reviewDesc })}
             value={this.state.reviewDesc}
           />
           <Button
@@ -178,10 +185,7 @@ class AddReview extends Component {
               {this.state.photos.map((item, i) => this.renderImage(item, i))}
             </ScrollView>
           </Card>
-          <Button
-            title="Add Review"
-            onPress={() => this._addReview()}
-          />
+          <Button title="Add Review" onPress={() => this._addReview()} />
         </View>
       </ScrollView>
     );
@@ -195,12 +199,13 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     alignItems: "center",
     backgroundColor: "#ffffff",
-    height: Dimensions.get('window').height
+    height: Dimensions.get("window").height
   },
   card: {
-    width: Dimensions.get('window').width * 0.92,
+    width: Dimensions.get("window").width * 0.92,
     margin: 10,
-  },
+    justifyContent: "center"
+  }
 });
 
 function mapStateToProps(state) {
@@ -209,4 +214,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(AddReview);
+export default connect(
+  mapStateToProps,
+  actions
+)(AddReview);

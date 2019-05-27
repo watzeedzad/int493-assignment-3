@@ -215,14 +215,14 @@ router.put(
     if (
       typeof restaurantId === "undefined" ||
       typeof restaurantName === "undefined" ||
+      typeof restaurantTypeId === "undefined" ||
       typeof restaurantOpenTime === "undefined" ||
       typeof restaurantCloseTime === "undefined" ||
       typeof restaurantOpenDate === "undefined" ||
       typeof restaurantDesc === "undefined" ||
+      typeof restaurantAddress === "undefined" ||
       typeof restaurantLat === "undefined" ||
       typeof restaurantLong === "undefined" ||
-      typeof restaurantTypeId === "undefined" ||
-      typeof restaurantAddress === "undefined" ||
       typeof restaurantTel === "undefined"
     ) {
       res.status(500).send({
@@ -243,6 +243,7 @@ router.put(
       restaurantTypeId,
       restaurantOpenTime,
       restaurantCloseTime,
+      restaurantOpenDate,
       restaurantPicturePath,
       restaurantDesc,
       restaurantAddress,

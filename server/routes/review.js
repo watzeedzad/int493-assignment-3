@@ -117,7 +117,7 @@ router.post("/addReview", requireJWTAuth, (req, res, next) => {
 
 router.post(
   "/addReview",
-  uploadToS3.fields([{name: "reviewPicture"}]),
+  uploadToS3.array("reviewPicture"),
   async (req, res) => {
     let userId = req.user.userId;
     let reviewPicturePath = [];
@@ -139,8 +139,8 @@ router.post(
 
     console.log(req.files);
 
-    if (typeof req.files['reviewPicture'] !== "undefined") {
-      req.files['reviewPicture'].forEach(value => {
+    if (typeof req.files !== "undefined") {
+      req.files.forEach(value => {
         reviewPicturePath.push(value.location);
       });
     }
