@@ -39,7 +39,7 @@ class ImageBrowser extends Component {
     this.setState({ selected: newSelected })
   }
 
-  getPhotos = () => {
+  getPhotos = async () => {
     let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
       this.setState({
