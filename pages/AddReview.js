@@ -153,6 +153,7 @@ class AddReview extends Component {
             imageSize={40}
             startingValue={this.state.reviewRate}
             onFinishRating={(reviewRate) => this.setState({ reviewRate })}
+            fractions={1}
             style={{
               paddingTop: 12,
               flex: 0,

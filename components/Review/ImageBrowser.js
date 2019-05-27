@@ -8,7 +8,7 @@ import {
   Dimensions,
   Button
 } from 'react-native';
-import { FileSystem } from 'expo';
+import { FileSystem, Permissions } from 'expo';
 import ImageTile from './ImageTile';
 const { width } = Dimensions.get('window')
 
@@ -40,6 +40,13 @@ class ImageBrowser extends Component {
   }
 
   getPhotos = () => {
+    let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+    
     let params = { first: 50, mimeTypes: ['image/jpeg'] };
     if (this.state.after) params.after = this.state.after
     if (!this.state.has_next_page) return
