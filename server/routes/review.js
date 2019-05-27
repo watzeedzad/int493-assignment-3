@@ -66,10 +66,10 @@ const uploadToS3 = multer({
     s3: s3,
     bucket: process.env.S3_BUCKET_NAME,
     acl: "public-read",
-    metadata: function(req, file, cb) {
+    metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
-    key: function(req, file, cb) {
+    key: function (req, file, cb) {
       let fileMimeType = file.mimetype.split("/");
       let fileExtension = fileMimeType[1];
       cb(null, "photos/reviews/" + Date.now().toString() + "." + fileExtension);
@@ -117,7 +117,7 @@ router.post("/addReview", requireJWTAuth, (req, res, next) => {
 
 router.post(
   "/addReview",
-  uploadToS3.array("reviewPicture"),
+  uploadToS3.fields([{name: "reviewPicture"}]),
   async (req, res) => {
     let userId = req.user.userId;
     let reviewPicturePath = [];
@@ -137,8 +137,10 @@ router.post(
 
     restaurantId = parseInt(restaurantId);
 
-    if (typeof req.files !== "undefined") {
-      req.files.forEach(value => {
+    console.log(req.files);
+
+    if (typeof req.files['reviewPicture'] !== "undefined") {
+      req.files['reviewPicture'].forEach(value => {
         reviewPicturePath.push(value.location);
       });
     }
@@ -151,9 +153,10 @@ router.post(
       reviewPicturePath,
       async (errorStatus, addReviewResultData) => {
         if (errorStatus) {
+          console.log("error occur 1");
           res.status(200).send({
             error: true,
-            message: "error occur while adding new review 1"
+            message: "error occur while adding new review"
           });
           return;
         } else {
@@ -164,22 +167,26 @@ router.post(
               getAvgRestaurantRatingData
             ) => {
               if (getAvgRestaurantRatingStatus) {
+                console.log("error occur 2");
                 res.status(200).send({
                   error: true,
-                  message: "error occur while adding new review 2"
+                  message: "error occur while adding new review"
                 });
                 return;
               } else {
                 await updateRestaurantRating(
                   getAvgRestaurantRatingData[0],
                   updateRatingStatus => {
+                    console.log("error occur 3");
                     if (updateRatingStatus) {
                       res.status(200).send({
                         error: true,
-                        message: "error occur while adding new review 3"
+                        message: "error occur while adding new review"
                       });
                       return;
                     } else {
+                      console.log("success")
+                      console.log(addReviewResultData);
                       res.status(200).send({
                         error: false,
                         review: addReviewResultData
