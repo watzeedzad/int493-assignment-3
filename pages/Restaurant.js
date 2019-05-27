@@ -23,8 +23,6 @@ class Restaurant extends Component {
   render() {
     const { reviews, restaurant } = this.props;
 
-    console.log(this.props.restaurant);
-
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -35,6 +33,8 @@ class Restaurant extends Component {
           <RestaurantDetail restaurant={restaurant} />
           <RestaurantMap restaurant={restaurant} />
           <RestaurantNavigate
+            restaurantId={restaurant.restaurantId}
+            restaurantPicture={restaurant.restaurantPicturePath}
             restaurantLat={restaurant.restaurantLat}
             restaurantLong={restaurant.restaurantLong}
           />

@@ -7,6 +7,8 @@ import * as actions from "../redux/actions";
 import { ImagePicker, Location, Permissions } from 'expo';
 import { Avatar } from "react-native-elements";
 import RestaurantMap from "../components/Restaurant/RestaurantMap";
+import BackHeader from "../components/Utils/BackHeader";
+import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
 
@@ -219,34 +221,37 @@ class AddRestaurant extends Component {
 
   render() {
     return (
-      <View>
-        <ScrollView>
-          <View style={styles.container}>
-            {this.props.addRestaurant.isRejected && (
-              <Text style={{ color: "white", backgroundColor: "red" }}>
-                {this.props.addRestaurant.data}
-              </Text>
-            )}
-            <Avatar
-              source={{ uri: this.state.restaurantPicture }}
-              size="xlarge"
-              title="PIC"
-              onPress={() => this._pickImage()}
-              activeOpacity={0.7}
-              showEditButton={true}
-            />
-            <Form
-              ref="form"
-              type={RestaurantForm}
-              options={options}
-              onChange={(value) => this.setState({ value })}
-              value={this.state.value}
-            />
-            <RestaurantMap setAddress={this._setAddress} />
-            <Button style={{ height: 36 }} title="Add Restaurant" onPress={() => this._addRestaurant()} />
-          </View>
-        </ScrollView>
-      </View >
+      <ScrollView>
+        <BackHeader
+          titleText={"Add Restaurant"}
+          onPress={() => Actions.pop()}
+        />
+        <View style={styles.container}>
+
+          {this.props.addRestaurant.isRejected && (
+            <Text style={{ color: "white", backgroundColor: "red" }}>
+              {this.props.addRestaurant.data}
+            </Text>
+          )}
+          <Avatar
+            source={{ uri: this.state.restaurantPicture }}
+            size="xlarge"
+            title="PIC"
+            onPress={() => this._pickImage()}
+            activeOpacity={0.7}
+            showEditButton={true}
+          />
+          <Form
+            ref="form"
+            type={RestaurantForm}
+            options={options}
+            onChange={(value) => this.setState({ value })}
+            value={this.state.value}
+          />
+          <RestaurantMap setAddress={this._setAddress} />
+          <Button style={{ height: 36 }} title="Add Restaurant" onPress={() => this._addRestaurant()} />
+        </View>
+      </ScrollView>
     );
   }
 }
