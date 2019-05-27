@@ -87,7 +87,7 @@ router.get("/getRestaurantDetail", (req, res, next) => {
 
 router.get("/getRestaurantDetail", (req, res) => {
   let restaurantId = parseInt(req.query.restaurantId);
-
+  console.log(restaurantId)
   if (typeof restaurantId === "undefined") {
     res.status(500).send({
       error: true,
@@ -387,7 +387,8 @@ async function getRestaurantDetail(restaurantId, callback) {
             restaurantDesc: 1,
             restaurantAddress: 1,
             restaurantLat: 1,
-            restaurantLong: 1
+            restaurantLong: 1,
+            restaurantTel: 1
           }
         }
       ],

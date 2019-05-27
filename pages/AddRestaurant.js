@@ -150,6 +150,7 @@ class AddRestaurant extends Component {
 
     this.state = {
       value: {
+        restaurantId: null,
         restaurantName: "",
         restaurantOpenTime: "",
         restaurantCloseTime: "",
@@ -160,9 +161,15 @@ class AddRestaurant extends Component {
         restaurantTypeId: 100001,
         restaurantAddress: "",
         restaurantTel: "",
-        restaurantPicture: null
+        restaurantPicturePath: null
       }
     };
+  }
+
+  componentDidMount = () => {
+    if (this.props.restaurant) {
+      this.setState({ value: this.props.restaurant })
+    }
   }
 
   _pickImage = async () => {
@@ -172,18 +179,9 @@ class AddRestaurant extends Component {
     });
 
     if (!result.cancelled) {
-      this.setState({ restaurantPicture: result.uri });
+      this.setState({ value: { ...this.state.value, restaurantPicturePath: result.uri } });
     }
   };
-
-  _addRestaurant = () => {
-    const item = this.refs.form.getValue();
-    if (item == null) {
-      alert('Please enter your information.')
-    } else {
-      this.props.register(this.state.userPicturePath, item)
-    }
-  }
 
   _setAddress = async (lat, lon) => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -215,17 +213,40 @@ class AddRestaurant extends Component {
     if (item == null) {
       alert('Please enter your information.')
     } else {
-      this.props.addRestaurant(this.state.restaurantPicture, item)
+      this.props.addRestaurant(item.restaurantPicturePath, item)
+    }
+  }
+
+  _editRestaurant = () => {
+    const item = this.state.value
+    console.log("item edit:",item)
+    if (item == null) {
+      alert('Please enter your information.')
+    } else {
+      this.props.editRestaurant(item.restaurantPicturePath, item)
+    }
+  }
+
+  renderHeader = () => {
+    if (this.state.value.restaurantId != null) {
+      return (<BackHeader titleText={"Edit Restaurant"} onPress={() => Actions.pop()} />)
+    } else {
+      return (<BackHeader titleText={"Add Restaurant"} onPress={() => Actions.pop()} />)
+    }
+  }
+
+  renderButton = () => {
+    if (this.state.value.restaurantId != null) {
+      return (<Button style={{ height: 36 }} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
+    } else {
+      return (<Button style={{ height: 36 }} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
     }
   }
 
   render() {
     return (
       <ScrollView>
-        <BackHeader
-          titleText={"Add Restaurant"}
-          onPress={() => Actions.pop()}
-        />
+        {this.renderHeader()}
         <View style={styles.container}>
 
           {this.props.addRestaurant.isRejected && (
@@ -233,8 +254,13 @@ class AddRestaurant extends Component {
               {this.props.addRestaurant.data}
             </Text>
           )}
+          {this.props.editRestaurant.isRejected && (
+            <Text style={{ color: "white", backgroundColor: "red" }}>
+              {this.props.editRestaurant.data}
+            </Text>
+          )}
           <Avatar
-            source={{ uri: this.state.restaurantPicture }}
+            source={{ uri: this.state.value.restaurantPicturePath }}
             size="xlarge"
             title="PIC"
             onPress={() => this._pickImage()}
@@ -248,8 +274,8 @@ class AddRestaurant extends Component {
             onChange={(value) => this.setState({ value })}
             value={this.state.value}
           />
-          <RestaurantMap setAddress={this._setAddress} />
-          <Button style={{ height: 36 }} title="Add Restaurant" onPress={() => this._addRestaurant()} />
+          <RestaurantMap setAddress={this._setAddress}/>
+          {this.renderButton()}
         </View>
       </ScrollView>
     );
@@ -269,7 +295,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    addRestaurant: state.restaurantReducers.addRestaurant
+    addRestaurant: state.restaurantReducers.addRestaurant,
+    editRestaurant: state.restaurantReducers.editRestaurant
   };
 }
 

@@ -23,12 +23,13 @@ class RestaurantGridItem extends Component {
     let {
       restaurantName,
       restaurantRating,
-      restaurantPicturePath
+      restaurantPicturePath,
+      restaurantId
     } = this.props.item;
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => this.props.onPress(this.props.item)}>
+        <TouchableOpacity onPress={() => this.props.onPress(restaurantId)}>
           <ImageBackground
             source={{ uri: restaurantPicturePath }}
             imageStyle={styles.restaurantItemBackground}

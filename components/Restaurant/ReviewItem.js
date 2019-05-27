@@ -70,7 +70,6 @@ class ReviewItem extends Component {
         >
           {item.reviewPicturePath.map((e, index) => {
             if (index <= 1) {
-              console.log(index);
               return (
                 <Image
                   key={index}
@@ -91,8 +90,6 @@ class ReviewItem extends Component {
 
   render() {
     let { reviews } = this.props;
-
-    console.log(reviews);
 
     if (reviews.isRejected) {
       return (
