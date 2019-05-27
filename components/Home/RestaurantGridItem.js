@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
     height: (width * 47) / 100,
     justifyContent: "center",
     alignItems: "flex-end",
-    flexDirection: "row"
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderRadius: 3
   },
   restaurantLabel: {
     fontSize: 18
