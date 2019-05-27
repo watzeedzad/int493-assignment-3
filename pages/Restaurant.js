@@ -16,30 +16,43 @@ class Restaurant extends Component {
     this.state = {};
   }
 
+  componentWillMount = () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.props.loadRestaurant(this.props.restaurantId);
+    });
+  };
+
+  componentWillUnmount = () => {
+    this.focusListener.remove();
+  };
+
   componentDidMount() {
-    this.props.loadReviews(this.props.restaurant.restaurantId);
+    this.props.loadReviews(this.props.restaurantId);
   }
 
   render() {
     const { reviews, restaurant } = this.props;
-
     return (
       <ScrollView>
-        <View style={styles.container}>
-          <BackHeader
-            titleText={restaurant.restaurantName}
-            onPress={() => Actions.pop()}
-          />
-          <RestaurantDetail restaurant={restaurant} />
-          <RestaurantMap restaurant={restaurant} />
-          <RestaurantNavigate
-            restaurantId={restaurant.restaurantId}
-            restaurantPicture={restaurant.restaurantPicturePath}
-            restaurantLat={restaurant.restaurantLat}
-            restaurantLong={restaurant.restaurantLong}
-          />
-          <ReviewItem reviews={this.props.reviews} />
-        </View>
+        {restaurant.isLoading ?
+          <Text>Loading...</Text>
+          :
+          <View style={styles.container}>
+            <BackHeader
+              titleText={restaurant.data[0].restaurantName}
+              onPress={() => Actions.pop()}
+            />
+            <RestaurantDetail restaurant={restaurant.data[0]} />
+            <RestaurantMap restaurant={restaurant.data[0]} />
+            <RestaurantNavigate
+              restaurantId={restaurant.data[0].restaurantId}
+              restaurantPicture={restaurant.data[0].restaurantPicturePath}
+              restaurantLat={restaurant.data[0].restaurantLat}
+              restaurantLong={restaurant.data[0].restaurantLong}
+            />
+            <ReviewItem reviews={reviews} />
+          </View>
+        }
       </ScrollView>
     );
   }
@@ -56,7 +69,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    reviews: state.reviewReducers.reviews
+    reviews: state.reviewReducers.reviews,
+    restaurant: state.restaurantReducers.restaurant,
   };
 }
 

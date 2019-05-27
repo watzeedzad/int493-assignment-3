@@ -13,14 +13,15 @@ class RestaurantDetail extends Component {
       restaurantRating,
       restaurantTypeDesc,
       restaurantDesc,
-      restaurantPicturePath
+      restaurantPicturePath,
+      restaurantId
     } = this.props.restaurant;
     
     return (
       <View style={{ width: Dimensions.get('window').width}}>
         <TouchableOpacity onPress={() => {
           Actions.RestaurantDetail({
-            restaurant: this.props.restaurant
+            restaurantId: restaurantId
           });
         }}>
           <View style={styles.container}>

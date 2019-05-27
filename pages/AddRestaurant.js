@@ -219,6 +219,7 @@ class AddRestaurant extends Component {
 
   _editRestaurant = () => {
     const item = this.state.value
+    console.log("item edit:",item)
     if (item == null) {
       alert('Please enter your information.')
     } else {
@@ -253,6 +254,11 @@ class AddRestaurant extends Component {
               {this.props.addRestaurant.data}
             </Text>
           )}
+          {this.props.editRestaurant.isRejected && (
+            <Text style={{ color: "white", backgroundColor: "red" }}>
+              {this.props.editRestaurant.data}
+            </Text>
+          )}
           <Avatar
             source={{ uri: this.state.value.restaurantPicturePath }}
             size="xlarge"
@@ -268,7 +274,7 @@ class AddRestaurant extends Component {
             onChange={(value) => this.setState({ value })}
             value={this.state.value}
           />
-          <RestaurantMap setAddress={this._setAddress} />
+          <RestaurantMap setAddress={this._setAddress}/>
           {this.renderButton()}
         </View>
       </ScrollView>
@@ -289,7 +295,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    addRestaurant: state.restaurantReducers.addRestaurant
+    addRestaurant: state.restaurantReducers.addRestaurant,
+    editRestaurant: state.restaurantReducers.editRestaurant
   };
 }
 

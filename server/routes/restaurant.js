@@ -87,7 +87,7 @@ router.get("/getRestaurantDetail", (req, res, next) => {
 
 router.get("/getRestaurantDetail", (req, res) => {
   let restaurantId = parseInt(req.query.restaurantId);
-
+  console.log(restaurantId)
   if (typeof restaurantId === "undefined") {
     res.status(500).send({
       error: true,
@@ -243,6 +243,7 @@ router.put(
       restaurantTypeId,
       restaurantOpenTime,
       restaurantCloseTime,
+      restaurantOpenDate,
       restaurantPicturePath,
       restaurantDesc,
       restaurantAddress,

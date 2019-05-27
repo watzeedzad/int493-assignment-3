@@ -39,9 +39,9 @@ class Home extends Component {
     this.focusListener.remove();
   };
 
-  onPressRestaurant(restaurant) {
+  onPressRestaurant(restaurantId) {
     Actions.Restaurant({
-      restaurant: restaurant
+      restaurantId: restaurantId
     });
   }
 
