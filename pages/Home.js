@@ -29,6 +29,16 @@ class Home extends Component {
     this.props.loadRestaurantTypes();
   }
 
+  componentWillMount = () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      this.props.loadRestaurants();
+    });
+  };
+
+  componentWillUnmount = () => {
+    this.focusListener.remove();
+  };
+
   onPressRestaurant(restaurant) {
     Actions.Restaurant({
       restaurant: restaurant
