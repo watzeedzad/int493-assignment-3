@@ -12,7 +12,7 @@ class RestaurantDetail extends Component {
 
   componentWillMount = () => {
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      this.props.loadRestaurant(this.props.restaurant.restaurantId);
+      this.props.loadRestaurant(this.props.restaurantId);
     });
   };
 
@@ -26,7 +26,6 @@ class RestaurantDetail extends Component {
       restaurantOpendate, restaurantOpenTime, restaurantPicturePath, restaurantRating,
       restaurantTypeDesc
     } = this.props.restaurant.data[0]
-    
     return (
       <View style={{ flex: 1 }}>
         <ScrollView>
@@ -72,7 +71,7 @@ class RestaurantDetail extends Component {
                   title="Edit Restaurant"
                   onPress={() => {
                     Actions.AddRestaurant({
-                      restaurant: this.props.restaurant
+                      restaurant: this.props.restaurant.data[0]
                     })
                   }}
                   color={"#FF8C00"}
