@@ -30,17 +30,19 @@ export const addReview = (photos, restaurantId, reviewRate, reviewDesc) => {
         let fileType
         let uriParts
         let uri
+        let pictures = []
         photos.forEach(photo => {
             uri = photo.uri
             uriParts = uri.split('.');
             fileType = uriParts[uriParts.length - 1];
-        });
+            pictures.push({
+                uri,
+                name: `reviewPicture.${fileType}`,
+                type: `image/${fileType}`,
+            });
+        });    
 
-        formData.append('reviewPicture', {
-            uri,
-            name: `reviewPicture.${fileType}`,
-            type: `image/${fileType}`,
-        });
+        formData.append('reviewPicture', pictures);
         
     } else {
         formData.append('reviewPicture', []);
@@ -71,7 +73,8 @@ export const addReview = (photos, restaurantId, reviewRate, reviewDesc) => {
                 dispatch({ type: 'ADD_REVIEW_SUCCESS' })
             }
         }).catch(err => {
-            console.log(err)
+            console.log(err.response);
+            console.log(err.toString())
             dispatch({ type: 'ADD_REVIEW_REJECTED', payload: err.message })
         })
     };

@@ -59,6 +59,7 @@ export const addRestaurant = (uri, item) => {
     }else{
       formData.append('restaurantPicture', null);
     }
+    console.log(formData)
     formData.append('restaurantName', item.restaurantName);
     formData.append('restaurantOpenTime', item.restaurantOpenTime);
     formData.append('restaurantCloseTime', item.restaurantCloseTime);
