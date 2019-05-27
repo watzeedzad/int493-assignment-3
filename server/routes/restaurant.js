@@ -386,7 +386,8 @@ async function getRestaurantDetail(restaurantId, callback) {
             restaurantDesc: 1,
             restaurantAddress: 1,
             restaurantLat: 1,
-            restaurantLong: 1
+            restaurantLong: 1,
+            restaurantTel: 1
           }
         }
       ],
