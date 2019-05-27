@@ -11,7 +11,7 @@ const restaurantTypeSchema = new Schema({
 MongooseAutoIncrementID.initialise("restaurantTypeId");
 
 const options = {
-  field: "restaurantId",
+  field: "restaurantTypeId",
   incrementBy: 1,
   nextCount: false,
   resetCount: "reset",

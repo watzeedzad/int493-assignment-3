@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
-    width: (width * 20) / 100,
+    width: (width * 25) / 100,
     height: (width * 15) / 100,
-    flexWrap: "wrap"
+    // flexWrap: "wrap"
     // borderRadius: 3,
     // borderColor: "white",
     // backgroundColor: "white",
