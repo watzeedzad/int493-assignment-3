@@ -22,7 +22,7 @@ const options = {
   incrementBy: 1,
   nextCount: false,
   resetCount: "reset",
-  startAt: 1000000,
+  startAt: 1000001,
   unique: true
 };
 

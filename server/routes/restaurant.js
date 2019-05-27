@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let restaurant = require("../model/Restaurant");
+let restaurantType = require("../model/RestaurantType");
 const passport = require("passport");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -267,6 +268,39 @@ router.put(
   }
 );
 
+router.put("/addRestaurantType", requireJWTAuth, (req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
+
+router.post("/addRestaurantType", (req, res) => {
+  let { restaurantTypeDesc } = req.body;
+
+  if (typeof restaurantTypeDesc === "undefined") {
+    res.status(500).send({
+      error: true,
+      message: "can not get data from all required parameter"
+    });
+    return;
+  }
+
+  addRestaurantType(restaurantTypeDesc, (errorStatus, restaurantResult) => {
+    if (errorStatus) {
+      res.status(500).send({
+        error: true,
+        message: "error occur while adding new restaurant type"
+      });
+      return;
+    } else {
+      res.status(200).send({
+        error: false,
+        restaurant: restaurantResult
+      });
+      return;
+    }
+  });
+});
+
 async function editRestaurant(
   restaurantId,
   restaurantName,
@@ -402,6 +436,27 @@ async function addRestaurant(
       restaurantTel: restaurantTel
     });
     await newRestaurantData.save((err, doc) => {
+      if (err) {
+        console.log(err);
+        callback(true, null);
+      } else if (!doc) {
+        callback(true, null);
+      } else {
+        callback(false, doc);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    callback(true, null);
+  }
+}
+
+async function addRestaurantType(restaurantTypeDesc, callback) {
+  try {
+    const newRestaurantType = new restaurantType({
+      restaurantTypeDesc: restaurantTypeDesc
+    });
+    await newRestaurantType.save((err, doc) => {
       if (err) {
         console.log(err);
         callback(true, null);
