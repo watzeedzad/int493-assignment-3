@@ -9,6 +9,7 @@ import {
   Button
 } from "react-native";
 import { Popup } from "react-native-map-link";
+import { Actions } from "react-native-router-flux";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,7 +46,10 @@ class RestaurantNavigateButton extends Component {
               <Button
                 title="Add Review"
                 onPress={() => {
-                  console.log("click add review");
+                  Actions.AddReview({
+                    restaurantId: this.props.restaurantId,
+                    restaurantPicture: this.props.restaurantPicture
+                  })
                 }}
                 color={"#FF8C00"}
               />
