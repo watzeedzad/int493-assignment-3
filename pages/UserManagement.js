@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, View, StyleSheet, AsyncStorage, ActivityIndicator } from "react-native";
+import { FlatList, View, StyleSheet, AsyncStorage, ActivityIndicator, Text } from "react-native";
 import UserMenuItem from "../components/User/UserMenuItem";
 import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";

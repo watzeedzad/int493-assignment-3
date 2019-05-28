@@ -10,14 +10,15 @@ import BackHeader from "../components/Utils/BackHeader";
 import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
+const { width, height } = Dimensions.get("screen");
 
 const Email = t.refinement(t.String, email => {
-  const reg = /[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; 
+  const reg = /[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   return reg.test(email);
 });
 
 const Tel = t.refinement(t.String, tel => {
-  const reg = /[0-9]{10}?/; 
+  const reg = /[0-9]{10}?/;
   return reg.test(tel);
 });
 
@@ -26,11 +27,11 @@ const formStyles = {
   formGroup: {
     normal: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     },
     error: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     }
   },
   textbox: {
@@ -190,33 +191,37 @@ class EditUser extends Component {
       },
       stylesheet: formStyles
     };
-    
+
     return (
-      <View stlye={{ flex: 1 }}>
+      <View style={styles.container}>
         {this.renderHeader()}
-        <ScrollView>
-          <View style={styles.container}>
-            {this.props.register.data? this.props.register.data.errorMessage:null}
-            <View style={styles.field}>
-              <Avatar
-                source={{ uri: this.state.value.userPicturePath }}
-                size="xlarge"
-                rounded
-                title="PIC"
-                onPress={() => this._pickImage()}
-                activeOpacity={0.7}
-                showEditButton={true}
-              />
-              <Form
-                ref="form"
-                type={UserForm}
-                options={options}
-                onChange={value => this.setState({ value })}
-                value={this.state.value}
-              />
-            </View>
-            <View style={styles.button}>{this.renderButton()}</View>
+        <ScrollView
+          style={{
+            width: Dimensions.get("window").width
+          }}
+        >
+          {this.props.register.data
+            ? this.props.register.data.errorMessage
+            : null}
+          <View style={styles.field}>
+            <Avatar
+              source={{ uri: this.state.value.userPicturePath }}
+              size="xlarge"
+              rounded
+              title="PIC"
+              onPress={() => this._pickImage()}
+              activeOpacity={0.7}
+              showEditButton={true}
+            />
+            <Form
+              ref="form"
+              type={UserForm}
+              options={options}
+              onChange={value => this.setState({ value })}
+              value={this.state.value}
+            />
           </View>
+          <View style={styles.button}>{this.renderButton()}</View>
         </ScrollView>
       </View>
     );
@@ -227,8 +232,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    height: Dimensions.get("window").height
+    backgroundColor: "#ffffff"
   },
   field: {
     marginTop: 20,
@@ -239,7 +243,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 15,
     backgroundColor: "#ffffff",
-    width: 250
+    width: (width * 70) / 100,
+    marginLeft: (width * 15) / 100,
+    marginRight: (width * 15) / 100
   }
 });
 

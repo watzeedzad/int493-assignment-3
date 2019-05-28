@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Button, StyleSheet, ScrollView } from "react-native";
+import { View, Button, StyleSheet, ScrollView, Dimensions } from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
@@ -11,9 +11,10 @@ import BackHeader from "../components/Utils/BackHeader";
 import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
+const { width, height } = Dimensions.get("screen");
 
 const Tel = t.refinement(t.String, tel => {
-  const reg = /[0-9]{10}?/; 
+  const reg = /[0-9]{10}?/;
   return reg.test(tel);
 });
 
@@ -42,11 +43,11 @@ const formStyles = {
   formGroup: {
     normal: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     },
     error: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     }
   },
   textbox: {
@@ -90,12 +91,12 @@ const multilineStyle = {
     normal: {
       ...Form.stylesheet.textbox.normal,
       height: 100,
-      width: 250
+      width: (width * 70) / 100
     },
     error: {
       ...Form.stylesheet.textbox.error,
       height: 100,
-      width: 250
+      width: (width * 70) / 100
     }
   }
 };
@@ -304,7 +305,9 @@ class AddRestaurant extends Component {
             />
             <RestaurantMap setAddress={this._setAddress} />
           </View>
-          <View style={styles.button}>{this.renderButton()}</View>
+          <View style={{ backgroundColor: "white" }}>
+            <View style={styles.button}>{this.renderButton()}</View>
+          </View>
         </ScrollView>
       </View>
     );
@@ -323,7 +326,11 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     backgroundColor: "#ffffff",
-    padding: 20
+    paddingTop: 20,
+    paddingBottom: 20,
+    width: (width * 70) / 100,
+    marginLeft: (width * 15) / 100,
+    marginRight: (width * 15) / 100
   }
 });
 

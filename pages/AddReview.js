@@ -19,6 +19,7 @@ import BackHeader from "../components/Utils/BackHeader";
 import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
+const { width, height } = Dimensions.get("screen");
 
 const ReviewForm = t.struct({
   reviewDesc: t.String
@@ -29,11 +30,11 @@ const formStyles = {
   formGroup: {
     normal: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     },
     error: {
       marginBottom: 10,
-      width: 250
+      width: (width * 70) / 100
     }
   },
   textbox: {
@@ -77,12 +78,12 @@ const multilineStyle = {
     normal: {
       ...Form.stylesheet.textbox.normal,
       height: 100,
-      width: 250
+      width: (width * 70) / 100
     },
     error: {
       ...Form.stylesheet.textbox.error,
       height: 100,
-      width: 250
+      width: (width * 70) / 100
     }
   }
 };
@@ -185,7 +186,13 @@ class AddReview extends Component {
               {this.state.photos.map((item, i) => this.renderImage(item, i))}
             </ScrollView>
           </Card>
-          <Button title="Add Review" color={"#FF8C00"} onPress={() => this._addReview()} />
+          <View style={styles.addReviewButton}>
+            <Button
+              title="Add Review"
+              color={"#FF8C00"}
+              onPress={() => this._addReview()}
+            />
+          </View>
         </View>
       </ScrollView>
     );
@@ -205,6 +212,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width * 0.92,
     margin: 10,
     justifyContent: "center"
+  },
+  addReviewButton: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    width: (width * 70) / 100,
+    marginLeft: (width * 15) / 100,
+    marginRight: (width * 15) / 100
   }
 });
 
