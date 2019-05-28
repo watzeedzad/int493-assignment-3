@@ -6,6 +6,9 @@ let jwt = require("jwt-simple");
 let multer = require("multer");
 let multer_s3 = require("multer-s3");
 let aws = require("aws-sdk");
+const passport = require("passport");
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const JwtStrategy = require("passport-jwt").Strategy;
 require("dotenv").config();
 
 const s3 = new aws.S3({
@@ -48,6 +51,26 @@ const loginMiddleWare = (req, res, next) => {
   }
 };
 
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(
+    "authorization".toLowerCase()
+  ),
+  secretOrKey: process.env.JWT_SECRET
+};
+const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
+  login(payload.username, result => {
+    if (result == null) {
+      done(null, false);
+    } else {
+      done(null, result);
+    }
+  });
+});
+
+passport.use(jwtAuth);
+
+const requireJWTAuth = passport.authenticate("jwt", { session: false });
+
 router.post("/login", (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
   next();
@@ -61,7 +84,7 @@ router.post("/login", loginMiddleWare, (req, res) => {
     res.status(200).send({
       error: true,
       message: "user not found!"
-    })
+    });
     return;
   }
 
@@ -195,6 +218,89 @@ router.post("/register", (req, res) => {
     );
   });
 });
+
+router.put("/editUser", requireJWTAuth, (req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
+
+router.put("/editUser", uploadToS3.single("profilePicture"), (req, res) => {
+  let { email, firstname, lastname, tel } = req.body;
+  let userId = req.user.userId;
+
+  if (
+    typeof email === "undefined" ||
+    typeof firstname === "undefined" ||
+    typeof lastname === "undefined" ||
+    typeof tel === "undefined"
+  ) {
+    res.status(500).send({
+      error: true,
+      message: "can not get data from all required parameter"
+    });
+    return;
+  }
+
+  editUser(
+    userId,
+    email,
+    firstname,
+    lastname,
+    tel,
+    (editUserStatus, editUserResultData) => {
+      if (editUserStatus) {
+        res.status(500).send({
+          error: true,
+          message: "error occur while update user info"
+        });
+      } else {
+        res.status(200).send({
+          error: false,
+          userData: {
+            userId: editUserResultData.userId,
+            username: editUserResultData.username,
+            email: editUserResultData.email,
+            firstname: editUserResultData.firstname,
+            lastname: editUserResultData.lastname,
+            tel: editUserResultData.tel,
+            userPicturePath: editUserResultData.userPicturePath
+          }
+        });
+      }
+    }
+  );
+});
+
+async function editUser(userId, email, firstname, lastname, tel, callback) {
+  try {
+    await user.findOneAndUpdate(
+      {
+        userId: userId
+      },
+      {
+        $set: {
+          email: email,
+          firstname: firstname,
+          lastname: lastname,
+          tel: tel
+        }
+      },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          callback(true, null);
+        } else if (!doc) {
+          callback(true, null);
+        } else {
+          callback(false, doc);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    callback(true, null);
+  }
+}
 
 async function login(username, callback) {
   try {
