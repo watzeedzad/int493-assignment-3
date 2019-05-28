@@ -11,6 +11,16 @@ import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
 
+const Email = t.refinement(t.String, email => {
+  const reg = /[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; 
+  return reg.test(email);
+});
+
+const Tel = t.refinement(t.String, tel => {
+  const reg = /[0-9]{10}?/; 
+  return reg.test(tel);
+});
+
 const formStyles = {
   ...Form.stylesheet, // copy over all of the default styles
   formGroup: {
@@ -147,10 +157,10 @@ class EditUser extends Component {
     const UserForm = t.struct({
       username: this.props.user ? t.maybe(t.String) : t.String,
       password: this.props.user ? t.maybe(t.String) : t.String,
-      email: t.String,
+      email: Email,
       firstname: t.String,
       lastname: t.String,
-      tel: t.String
+      tel: Tel
     });
 
     const options = {
@@ -166,23 +176,27 @@ class EditUser extends Component {
           hidden: this.props.user ? true : false
         },
         email: {
-          error: "E-mail can not empty."
+          error: "Email is invalid. (ex. test01@email.com)"
         },
         firstname: {
           error: "Firstname can not empty."
         },
         lastname: {
           error: "Lastname can not empty."
+        },
+        tel: {
+          error: "Tel is invalid. (ex. 012-3456789)"
         }
       },
       stylesheet: formStyles
     };
-
+    
     return (
       <View stlye={{ flex: 1 }}>
         {this.renderHeader()}
         <ScrollView>
           <View style={styles.container}>
+            {this.props.register.data? this.props.register.data.errorMessage:null}
             <View style={styles.field}>
               <Avatar
                 source={{ uri: this.state.value.userPicturePath }}
