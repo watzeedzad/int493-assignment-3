@@ -12,6 +12,11 @@ import { Actions } from "react-native-router-flux";
 
 const Form = t.form.Form;
 
+const Tel = t.refinement(t.String, tel => {
+  const reg = /[0-9]{10}?/; 
+  return reg.test(tel);
+});
+
 const Type = t.enums({
   100001: 'อาหารคาว',
   100002: 'อาหารหวาน',
@@ -28,7 +33,7 @@ const RestaurantForm = t.struct({
   restaurantLat: t.Number,
   restaurantLong: t.Number,
   restaurantTypeId: Type,
-  restaurantTel: t.String,
+  restaurantTel: Tel,
   restaurantAddress: t.String
 });
 
@@ -131,7 +136,7 @@ const options = {
     },
     restaurantTel: {
       label: "Tel",
-      error: "Tel can not empty."
+      error: "Tel is invalid. (ex. 012-3456789)"
     },
     restaurantLat: {
       hidden: true
