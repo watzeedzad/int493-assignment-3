@@ -5,7 +5,7 @@ import { MapView } from "expo";
 import { GOOGLE_KEY } from "../../Utils/GoogleMapApiKey";
 const { Marker, AnimatedRegion } = MapView;
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 const ASPECT_RATIO = width / height;
 const LATITUDE = 13.6511922;
 const LONGITUDE = 100.4965789;
@@ -63,10 +63,10 @@ class RestaurantMap extends Component {
     longitudeDelta: LONGITUDE_DELTA
   });
 
-  setMarker = (event) => {
+  setMarker = event => {
     if (!this.props.restaurant) {
-      const { latitude, longitude } = event.nativeEvent.coordinate
-      this.props.setAddress(latitude,longitude)
+      const { latitude, longitude } = event.nativeEvent.coordinate;
+      this.props.setAddress(latitude, longitude);
       this.setState({
         latitude: latitude,
         longitude: longitude,
@@ -76,26 +76,27 @@ class RestaurantMap extends Component {
         })
       });
     }
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          onPress={(event) => this.setMarker(event)}
+          onPress={event => this.setMarker(event)}
           loadingEnabled
           provider="google"
           ref={c => (this.mapView = c)}
           initialRegion={this.getMapRegion()}
         >
-          {this.state.coordinate &&
+          {this.state.coordinate && (
             <Marker.Animated
               ref={marker => {
                 this.marker = marker;
               }}
               coordinate={this.state.coordinate}
-            />}
+            />
+          )}
         </MapView>
       </View>
     );
@@ -107,11 +108,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#FFFFFF",
     marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    padding: 10
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10
   },
   map: {
     height: 200,

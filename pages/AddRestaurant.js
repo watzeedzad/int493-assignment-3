@@ -4,7 +4,7 @@ import { View, Button, StyleSheet, ScrollView } from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
-import { ImagePicker, Location, Permissions } from 'expo';
+import { ImagePicker, Location, Permissions } from "expo";
 import { Avatar } from "react-native-elements";
 import RestaurantMap from "../components/Restaurant/RestaurantMap";
 import BackHeader from "../components/Utils/BackHeader";
@@ -13,10 +13,10 @@ import { Actions } from "react-native-router-flux";
 const Form = t.form.Form;
 
 const Type = t.enums({
-  100001: 'อาหารคาว',
-  100002: 'อาหารหวาน',
-  100003: 'ชาบู',
-  100004: 'ปิ้งย่าง',
+  100001: "อาหารคาว",
+  100002: "อาหารหวาน",
+  100003: "ชาบู",
+  100004: "ปิ้งย่าง"
 });
 
 const RestaurantForm = t.struct({
@@ -93,7 +93,7 @@ const multilineStyle = {
       width: 250
     }
   }
-}
+};
 
 const options = {
   fields: {
@@ -117,16 +117,16 @@ const options = {
       label: "Description",
       error: "Description can not empty.",
       multiline: true,
-      stylesheet: multilineStyle,
+      stylesheet: multilineStyle
     },
     restaurantTypeId: {
       label: "Type",
-      nullOption: false,
+      nullOption: false
     },
     restaurantAddress: {
       label: "Address",
       multiline: true,
-      stylesheet: multilineStyle,
+      stylesheet: multilineStyle
       // editable: false
     },
     restaurantTel: {
@@ -168,118 +168,140 @@ class AddRestaurant extends Component {
 
   componentDidMount = () => {
     if (this.props.restaurant) {
-      this.setState({ value: this.props.restaurant })
+      this.setState({ value: this.props.restaurant });
     }
-  }
+  };
 
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 3]
     });
 
     if (!result.cancelled) {
-      this.setState({ value: { ...this.state.value, restaurantPicturePath: result.uri } });
+      this.setState({
+        value: { ...this.state.value, restaurantPicturePath: result.uri }
+      });
     }
   };
 
   _setAddress = async (lat, lon) => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
+    if (status !== "granted") {
       this.setState({
-        errorMessage: 'Permission to access location was denied',
+        errorMessage: "Permission to access location was denied"
       });
     }
 
-    let address = await Location.reverseGeocodeAsync(
-      {
-        latitude: lat,
-        longitude: lon,
-      },
-    );
+    let address = await Location.reverseGeocodeAsync({
+      latitude: lat,
+      longitude: lon
+    });
 
     this.setState({
       value: {
         ...this.state.value,
         restaurantLat: lat,
         restaurantLong: lon,
-        restaurantAddress: address[0].name + " " + address[0].street + " " + address[0].region
+        restaurantAddress:
+          address[0].name + " " + address[0].street + " " + address[0].region
       }
-    })
-  }
+    });
+  };
 
   _addRestaurant = () => {
-    const item = this.state.value
+    const item = this.state.value;
     if (item == null) {
-      alert('Please enter your information.')
+      alert("Please enter your information.");
     } else {
-      this.props.addRestaurant(item.restaurantPicturePath, item)
+      this.props.addRestaurant(item.restaurantPicturePath, item);
     }
-  }
+  };
 
   _editRestaurant = () => {
-    const item = this.state.value
-    console.log("item edit:", item)
+    const item = this.state.value;
+    console.log("item edit:", item);
     if (item == null) {
-      alert('Please enter your information.')
+      alert("Please enter your information.");
     } else {
-      this.props.editRestaurant(item.restaurantPicturePath, item)
+      this.props.editRestaurant(item.restaurantPicturePath, item);
     }
-  }
+  };
 
   renderHeader = () => {
     if (this.state.value.restaurantId != null) {
-      return (<BackHeader titleText={"Edit Restaurant"} onPress={() => Actions.pop()} />)
+      return (
+        <BackHeader
+          titleText={"Edit Restaurant"}
+          onPress={() => Actions.pop()}
+        />
+      );
     } else {
-      return (<BackHeader titleText={"Add Restaurant"} onPress={() => Actions.pop()} />)
+      return (
+        <BackHeader
+          titleText={"Add Restaurant"}
+          onPress={() => Actions.pop()}
+        />
+      );
     }
-  }
+  };
 
   renderButton = () => {
     if (this.state.value.restaurantId != null) {
-      return (<Button color={"#FF8C00"} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
+      return (
+        <Button
+          color={"#FF8C00"}
+          title="Edit Restaurant"
+          onPress={() => this._editRestaurant()}
+        />
+      );
     } else {
-      return (<Button color={"#FF8C00"} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
+      return (
+        <Button
+          color={"#FF8C00"}
+          title="Add Restaurant"
+          onPress={() => this._addRestaurant()}
+        />
+      );
     }
-  }
+  };
 
   render() {
     return (
-      <ScrollView>
+      <View style={{ flex: 1 }}>
         {this.renderHeader()}
-        <View style={styles.container}>
-
-          {this.props.addRestaurant.isRejected && (
-            <Text style={{ color: "white", backgroundColor: "red" }}>
-              {this.props.addRestaurant.data}
-            </Text>
-          )}
-          {this.props.editRestaurant.isRejected && (
-            <Text style={{ color: "white", backgroundColor: "red" }}>
-              {this.props.editRestaurant.data}
-            </Text>
-          )}
-          <Avatar
-            source={{ uri: this.state.value.restaurantPicturePath }}
-            size="xlarge"
-            title="PIC"
-            onPress={() => this._pickImage()}
-            activeOpacity={0.7}
-            showEditButton={true}
-          />
-          <Form
-            ref="form"
-            type={RestaurantForm}
-            options={options}
-            onChange={(value) => this.setState({ value })}
-            value={this.state.value}
-          />
-          <RestaurantMap setAddress={this._setAddress} />
-        </View>
-        <View style={styles.button}>
-          {this.renderButton()}
-        </View>
-      </ScrollView>
+        <ScrollView>
+          <View style={styles.container}>
+            {this.props.addRestaurant.isRejected && (
+              <Text style={{ color: "white", backgroundColor: "red" }}>
+                {this.props.addRestaurant.data}
+              </Text>
+            )}
+            {this.props.editRestaurant.isRejected && (
+              <Text style={{ color: "white", backgroundColor: "red" }}>
+                {this.props.editRestaurant.data}
+              </Text>
+            )}
+            <Avatar
+              source={{ uri: this.state.value.restaurantPicturePath }}
+              size="xlarge"
+              title="PIC"
+              onPress={() => this._pickImage()}
+              activeOpacity={0.7}
+              showEditButton={true}
+            />
+            <Form
+              ref="form"
+              type={RestaurantForm}
+              options={options}
+              onChange={value => this.setState({ value })}
+              value={this.state.value}
+            />
+            <RestaurantMap setAddress={this._setAddress} />
+          </View>
+          <View style={styles.button}>{this.renderButton()}</View>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -297,7 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     padding: 20
-  },
+  }
 });
 
 function mapStateToProps(state) {
@@ -307,4 +329,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(AddRestaurant);
+export default connect(
+  mapStateToProps,
+  actions
+)(AddRestaurant);

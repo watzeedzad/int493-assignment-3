@@ -4,7 +4,7 @@ import { View, Button, StyleSheet, ScrollView, Dimensions } from "react-native";
 import t from "tcomb-form-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
-import { ImagePicker } from 'expo';
+import { ImagePicker } from "expo";
 import { Avatar } from "react-native-elements";
 import BackHeader from "../components/Utils/BackHeader";
 import { Actions } from "react-native-router-flux";
@@ -57,8 +57,6 @@ const formStyles = {
   }
 };
 
-
-
 class EditUser extends Component {
   constructor(props) {
     super(props);
@@ -78,57 +76,74 @@ class EditUser extends Component {
 
   componentDidMount = () => {
     if (this.props.user) {
-      this.setState({ value: this.props.user })
+      this.setState({ value: this.props.user });
     }
-  }
+  };
 
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 3]
     });
 
     if (!result.cancelled) {
-      this.setState({ value: { ...this.state.value, userPicturePath: result.uri } });
+      this.setState({
+        value: { ...this.state.value, userPicturePath: result.uri }
+      });
     }
   };
 
   _register = () => {
     const item = this.refs.form.getValue();
     if (item == null) {
-      alert('Please enter your information.')
+      alert("Please enter your information.");
     } else {
-      this.props.register(this.state.value.userPicturePath, item)
+      this.props.register(this.state.value.userPicturePath, item);
     }
-  }
+  };
 
   _editUser = () => {
     const item = this.refs.form.getValue();
     if (item == null) {
-      alert('Please enter your information.')
+      alert("Please enter your information.");
     } else {
-      this.props.editUser(this.state.value.userPicturePath, item)
+      this.props.editUser(this.state.value.userPicturePath, item);
     }
-  }
+  };
 
   renderHeader = () => {
     if (this.props.user) {
-      return (<BackHeader titleText={"Edit Profile"} onPress={() => Actions.pop()} />)
+      return (
+        <BackHeader titleText={"Edit Profile"} onPress={() => Actions.pop()} />
+      );
     } else {
-      return (<BackHeader titleText={"Register"} onPress={() => Actions.pop()} />)
+      return (
+        <BackHeader titleText={"Register"} onPress={() => Actions.pop()} />
+      );
     }
-  }
+  };
 
   renderButton = () => {
     if (this.props.user) {
-      return (<Button color={"#FF8C00"} title="Edit Profile" onPress={() => this._editUser()} />)
+      return (
+        <Button
+          color={"#FF8C00"}
+          title="Edit Profile"
+          onPress={() => this._editUser()}
+        />
+      );
     } else {
-      return (<Button color={"#FF8C00"} title="Register" onPress={() => this._register()} />)
+      return (
+        <Button
+          color={"#FF8C00"}
+          title="Register"
+          onPress={() => this._register()}
+        />
+      );
     }
-  }
+  };
 
   render() {
-
     const UserForm = t.struct({
       username: this.props.user ? t.maybe(t.String) : t.String,
       password: this.props.user ? t.maybe(t.String) : t.String,
@@ -165,10 +180,9 @@ class EditUser extends Component {
 
     return (
       <View stlye={{ flex: 1 }}>
+        {this.renderHeader()}
         <ScrollView>
-          {this.renderHeader()}
           <View style={styles.container}>
-
             <View style={styles.field}>
               <Avatar
                 source={{ uri: this.state.value.userPicturePath }}
@@ -183,14 +197,11 @@ class EditUser extends Component {
                 ref="form"
                 type={UserForm}
                 options={options}
-                onChange={(value) => this.setState({ value })}
+                onChange={value => this.setState({ value })}
                 value={this.state.value}
               />
             </View>
-            <View style={styles.button}>
-              {this.renderButton()}
-            </View>
-
+            <View style={styles.button}>{this.renderButton()}</View>
           </View>
         </ScrollView>
       </View>
@@ -215,7 +226,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#ffffff",
     width: 250
-  },
+  }
 });
 
 function mapStateToProps(state) {
@@ -225,4 +236,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(EditUser);
+export default connect(
+  mapStateToProps,
+  actions
+)(EditUser);
