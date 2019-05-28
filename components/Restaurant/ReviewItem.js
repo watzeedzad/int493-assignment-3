@@ -6,11 +6,13 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 import moment from "moment";
 import { Card } from "react-native-paper";
 import { Rating } from "react-native-ratings";
+import { Actions } from "react-native-router-flux";
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,65 +27,70 @@ class ReviewItem extends Component {
   renderItem = ({ item }) => {
     return (
       <Card style={styles.card} elevation={10}>
-        <View style={{ flex: 0, flexDirection: "row" }}>
-          <Image
-            source={{ uri: item.userPicturePath[0] }}
-            style={{
-              borderRadius: 150 / 2,
-              width: (width * 15) / 100,
-              height: (width * 15) / 100
-            }}
-          />
-          <View style={{ flex: 0, flexDirection: "column", paddingLeft: 10 }}>
-            <Text>
-              {item.firstname[0]} {item.lastname[0]}
-            </Text>
-            <Text>
-              {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
-            </Text>
-            <Rating
-              type="star"
-              imageSize={15}
-              startingValue={item.reviewRate}
-              readonly={true}
-              fractions={1}
+        <TouchableOpacity
+          onPress={() =>
+            Actions.ReviewDetail({
+              review: item
+            })
+          }
+        >
+          <View style={{ flex: 0, flexDirection: "row" }}>
+            <Image
+              source={{ uri: item.userPicturePath[0] }}
               style={{
-                paddingTop: 3,
-                flex: 0,
-                flexDirection: "row",
-                justifyContent: "flex-start",
+                borderRadius: 150 / 2,
+                width: (width * 15) / 100,
+                height: (width * 15) / 100
               }}
             />
+            <View style={{ flex: 0, flexDirection: "column", paddingLeft: 10 }}>
+              <Text>
+                {item.firstname[0]} {item.lastname[0]}
+              </Text>
+              <Text>
+                {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
+              </Text>
+              <Rating
+                type="star"
+                imageSize={15}
+                startingValue={item.reviewRate}
+                readonly={true}
+                fractions={1}
+                style={{
+                  paddingTop: 3,
+                  flex: 0,
+                  flexDirection: "row",
+                  justifyContent: "flex-start"
+                }}
+              />
+            </View>
           </View>
-        </View>
-        {/* <Text>
-          Review Date : {moment(item.reviewDate).format("YYYY-MM-DD h:mm:ss a")}
-        </Text> */}
-        <View style={{ paddingTop: 10 }}>
-          <Text>{item.reviewDesc}</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center"
-          }}
-        >
-          {item.reviewPicturePath.map((e, index) => {
-            if (index <= 1) {
-              return (
-                <Image
-                  key={index}
-                  style={{
-                    width: (width * 36) / 100,
-                    height: (height * 14) / 100,
-                    margin: 7
-                  }}
-                  source={{ uri: e }}
-                />
-              );
-            }
-          })}
-        </View>
+          <View style={{ paddingTop: 10 }}>
+            <Text>{item.reviewDesc}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center"
+            }}
+          >
+            {item.reviewPicturePath.map((e, index) => {
+              if (index <= 1) {
+                return (
+                  <Image
+                    key={index}
+                    style={{
+                      width: (width * 36) / 100,
+                      height: (height * 14) / 100,
+                      margin: 7
+                    }}
+                    source={{ uri: e }}
+                  />
+                );
+              }
+            })}
+          </View>
+        </TouchableOpacity>
       </Card>
     );
   };

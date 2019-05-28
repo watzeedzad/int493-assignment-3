@@ -70,8 +70,14 @@ class Home extends Component {
     );
   };
 
-  renderItem = ({ item }) => {
-    return <RestaurantGridItem item={item} onPress={this.onPressRestaurant} />;
+  renderItem = ({ item, index }) => {
+    return (
+      <RestaurantGridItem
+        item={item}
+        onPress={this.onPressRestaurant}
+        renderItemIndex={index}
+      />
+    );
   };
 
   render() {
@@ -117,7 +123,7 @@ class Home extends Component {
               style={{ width: width }}
             />
           )}
-          {/* <Button title="Login" onPress={() => Actions.Login()}/> */}
+          <View style={{ marginBottom: 5 }} />
         </ScrollView>
       </View>
     );
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 10,
     width: (width * 25) / 100,
-    height: (width * 15) / 100,
+    height: (width * 15) / 100
     // flexWrap: "wrap"
     // borderRadius: 3,
     // borderColor: "white",

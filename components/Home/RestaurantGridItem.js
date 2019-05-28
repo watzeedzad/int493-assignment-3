@@ -22,13 +22,19 @@ class RestaurantGridItem extends Component {
   render() {
     let {
       restaurantName,
-      restaurantRating,
       restaurantPicturePath,
       restaurantId
     } = this.props.item;
 
+    let extraMargin = {};
+    if (this.props.renderItemIndex == 0 || this.props.renderItemIndex == 1) {
+      extraMargin = {
+        marginTop: 10
+      };
+    }
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, extraMargin]}>
         <TouchableOpacity onPress={() => this.props.onPress(restaurantId)}>
           <ImageBackground
             source={{ uri: restaurantPicturePath }}
