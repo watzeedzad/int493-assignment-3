@@ -49,7 +49,6 @@ class Restaurant extends Component {
             flex: 1,
             justifyContent: "center",
             alignItems: "center"
-            // paddingTop: (height * 45) / 100
           }}
         >
           <ActivityIndicator animating={true} size="large" color="#FF8C00" />

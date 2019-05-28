@@ -6,7 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../redux/actions";
@@ -89,6 +90,21 @@ class Home extends Component {
     if (restaurantTypes.isRejected) {
       return <Text>Error:{restaurantTypes.data}</Text>;
     }
+
+    if (restaurantTypes.isLoading || restaurants.isLoading) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ActivityIndicator animating={true} size="large" color="#FF8C00" />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <Header
@@ -101,28 +117,20 @@ class Home extends Component {
           }}
         />
         <ScrollView>
-          {restaurantTypes.isLoading ? (
-            <Text>Loading...</Text>
-          ) : (
-            <FlatList
-              data={restaurantTypes.data}
-              renderItem={this.renderNavItem}
-              keyExtractor={item => item._id.toString()}
-              style={{ backgroundColor: "white", width: width }}
-              horizontal={true}
-            />
-          )}
-          {restaurants.isLoading ? (
-            <Text>Loading...</Text>
-          ) : (
-            <FlatList
-              data={restaurants.data}
-              renderItem={this.renderItem}
-              keyExtractor={item => item._id.toString()}
-              numColumns={2}
-              style={{ width: width }}
-            />
-          )}
+          <FlatList
+            data={restaurantTypes.data}
+            renderItem={this.renderNavItem}
+            keyExtractor={item => item._id.toString()}
+            style={{ backgroundColor: "white", width: width }}
+            horizontal={true}
+          />
+          <FlatList
+            data={restaurants.data}
+            renderItem={this.renderItem}
+            keyExtractor={item => item._id.toString()}
+            numColumns={2}
+            style={{ width: width }}
+          />
           <View style={{ marginBottom: 5 }} />
         </ScrollView>
       </View>
