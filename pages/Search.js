@@ -1,19 +1,10 @@
 //import liraries
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  Image
-} from "react-native";
+import { View, StyleSheet, FlatList, ScrollView } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
-import RestaurantItem from "../components/Search/RestaurantItem";
-import { Card } from "react-native-paper";
+import RestaurantGridItem from "../components/Home/RestaurantGridItem";
 import AddRestaurant from "../components/Search/AddRestaurant";
 
 // create a component
@@ -57,8 +48,14 @@ class Search extends Component {
     }
   };
 
-  _restaurantListRenderItem = ({ item }) => {
-    return <RestaurantItem item={item} onPress={this.props.onPress} />;
+  _restaurantListRenderItem = ({ item, index }) => {
+    return (
+      <RestaurantGridItem
+        item={item}
+        onPress={this.props.onPress}
+        renderItemIndex={index}
+      />
+    );
   };
 
   _restaurantListKeyExtractor = item => item._id.toString();
@@ -87,6 +84,7 @@ class Search extends Component {
             data={this.state.filterRestaurantData}
             renderItem={this._restaurantListRenderItem}
             keyExtractor={this._restaurantListKeyExtractor}
+            numColumns={2}
           />
           <AddRestaurant />
         </ScrollView>
