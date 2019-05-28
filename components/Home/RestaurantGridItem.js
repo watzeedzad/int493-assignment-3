@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Dimensions
 } from "react-native";
+import { Rating } from "react-native-ratings";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -23,6 +24,8 @@ class RestaurantGridItem extends Component {
     let {
       restaurantName,
       restaurantPicturePath,
+      restaurantTypeDesc,
+      restaurantRating,
       restaurantId
     } = this.props.item;
 
@@ -41,7 +44,28 @@ class RestaurantGridItem extends Component {
             imageStyle={styles.restaurantItemBackground}
             style={styles.restaurantBackground}
           >
-            <Text style={styles.restaurantLabel}>{restaurantName}</Text>
+            <View
+              style={{
+                width: (width * 47) / 100,
+                backgroundColor: "white",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: 3,
+                paddingBottom: 3,
+                borderBottomLeftRadius: 3,
+                borderBottomRightRadius: 3
+              }}
+            >
+              <Rating
+                type="star"
+                imageSize={15}
+                startingValue={restaurantRating}
+                readonly={true}
+                fractions={1}
+              />
+              <Text style={styles.restaurantLabel}>{restaurantName}</Text>
+              <Text style={styles.restaurantLabel}>{restaurantTypeDesc}</Text>
+            </View>
           </ImageBackground>
         </TouchableOpacity>
       </View>
@@ -69,11 +93,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: "#A9A9A9",
     borderRadius: 3
   },
   restaurantLabel: {
-    fontSize: 18
+    fontSize: 14
   }
 });
 
