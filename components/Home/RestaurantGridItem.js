@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    paddingTop: 5
+    marginTop: 5,
+    marginBottom: 5
   },
   restaurantItemBackground: {
     resizeMode: "cover",
