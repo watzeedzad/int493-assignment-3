@@ -1,16 +1,24 @@
 //import liraries
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { AsyncStorage } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator
+} from "react-native"; import { AsyncStorage } from "react-native";
 import { Avatar } from "react-native-elements";
 import jwt_decode from 'jwt-decode'
+import { Actions } from "react-native-router-flux";
+import BackHeader from "../components/Utils/BackHeader";
+
 // create a component
 class UserProfile extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      token: null
+      user: null
     };
   }
 
@@ -19,24 +27,63 @@ class UserProfile extends Component {
   }
 
   loadUserInfo = async () => {
-    let user = await AsyncStorage.getItem("token")
-    let decoded = jwt_decode(user)
-    this.setState({ token: decoded })
-    console.log(this.state.token)
+    let token = await AsyncStorage.getItem("token")
+    let decoded = jwt_decode(token)
+    this.setState({ user: decoded })
+    console.log(this.state.user)
   }
   render() {
+    const { user } = this.state
+
+    if (user == null) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ActivityIndicator animating={true} size="large" color="#FF8C00" />
+        </View>
+      );
+    }
+
     return (
-      <View style={styles.container}>
-        { this.state.token &&
-          <Avatar
-            source={{ uri: this.state.token.userPicturePath }}
-            size="xlarge"
-            rounded
-            title="PIC"
-            activeOpacity={0.7}
-            showEditButton={true}
-          />
-        }
+      <View style={{ flex: 1 }}>
+        <BackHeader
+          titleText={"User Profile"}
+          onPress={() => Actions.pop()}
+        />
+        <ScrollView>
+          <View style={styles.container}>
+            <Avatar
+              source={{ uri: user.userPicturePath }}
+              size="xlarge"
+              rounded
+              title="PIC"
+              activeOpacity={0.7}
+            />
+            <View style={{margin:20}}>
+              <View style={styles.row}>
+                <Text style={styles.detail}>Name: </Text>
+                <Text style={styles.description}>{user.firstname} </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.detail}>Lastname: </Text>
+                <Text style={styles.description}>{user.lastname} </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.detail}>Username: </Text>
+                <Text style={styles.description}>{user.username} </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.detail}>E-mail: </Text>
+                <Text style={styles.description}>{user.email} </Text>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -46,9 +93,24 @@ class UserProfile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap"
+  },
+  detail: {
+    margin: 5,
+    fontSize: 18,
+    color: "orange",
+    textAlign: "left"
+  },
+  description: {
+    margin: 5,
+    fontSize: 18
   }
 });
 

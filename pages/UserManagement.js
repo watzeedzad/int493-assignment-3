@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, View, StyleSheet, AsyncStorage } from "react-native";
+import { FlatList, View, StyleSheet, AsyncStorage, ActivityIndicator } from "react-native";
 import UserMenuItem from "../components/User/UserMenuItem";
 import Header from "../components/Utils/Header";
 import { Actions } from "react-native-router-flux";
@@ -20,6 +20,7 @@ export class UserManagement extends Component {
   componentWillMount = () => {
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.checkLoggedIn();
+      this.props.loadRestaurants();
     });
   };
 
@@ -93,10 +94,45 @@ export class UserManagement extends Component {
     );
   };
 
+  onPressRestaurant(restaurantId) {
+    Actions.Restaurant({
+      restaurantId: restaurantId
+    });
+  }
+
   render() {
+    const { restaurants } = this.props;
+
+    if (restaurants.isRejected) {
+      return <Text>Error:{restaurants.data}</Text>;
+    }
+
+    if (restaurants.isLoading) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ActivityIndicator animating={true} size="large" color="#FF8C00" />
+        </View>
+      );
+    }
+
+
     return (
       <View style={styles.container}>
-        <Header titleText={"User Management"} />
+        <Header
+          titleText={"User Management"}
+          onPress={() => {
+            Actions.Search({
+              restaurantData: restaurants.data,
+              onPress: this.onPressRestaurant
+            });
+          }}
+        />
         <View>
           <FlatList
             data={this.state.menuItem}
@@ -117,7 +153,13 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(state) {
+  return {
+    restaurants: state.restaurantReducers.restaurants,
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(UserManagement);

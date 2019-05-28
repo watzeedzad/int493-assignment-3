@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import {
   View,
-  Text,
+  AsyncStorage,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
@@ -21,6 +21,19 @@ class RestaurantNavigateButton extends Component {
     this.state = {
       isVisible: false
     };
+  }
+
+  onPressAddReview = async () => {
+    let token = await AsyncStorage.getItem("token")
+    if (token == null) {
+      alert('Please login before add review.')
+      Actions.Login({});
+    } else {
+      Actions.AddReview({
+        restaurantId: this.props.restaurantId,
+        restaurantPicture: this.props.restaurantPicture
+      })
+    }
   }
 
   render() {
@@ -45,12 +58,7 @@ class RestaurantNavigateButton extends Component {
             <View style={[styles.button, { paddingLeft: 20 }]}>
               <Button
                 title="Add Review"
-                onPress={() => {
-                  Actions.AddReview({
-                    restaurantId: this.props.restaurantId,
-                    restaurantPicture: this.props.restaurantPicture
-                  })
-                }}
+                onPress={() => this.onPressAddReview()}
                 color={"#FF8C00"}
               />
             </View>

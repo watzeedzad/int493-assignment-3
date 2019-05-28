@@ -116,22 +116,30 @@ class Login extends Component {
 
     return (
       <View style={styles.container}>
-        {this.props.login.isRejected && (
-          <Text style={{ color: "white", backgroundColor: "red" }}>
-            {this.props.login.data}
-          </Text>
-        )}
-        <Image
-          source={require("../assets/utils/logo-kmutt.png")}
-          style={{ height: (height * 30) / 100, resizeMode: "contain" }}
-        />
-        <Form
-          ref="form"
-          type={LoginForm}
-          options={options}
-          value={this.state.value}
-        />
-        <Button title="Login" onPress={() => this.login()} />
+        <View style={styles.Field}>
+          {this.props.login.isRejected && (
+            <Text style={{ color: "white", backgroundColor: "red" }}>
+              {this.props.login.data}
+            </Text>
+          )}
+          <Image
+            source={require("../assets/utils/logo-kmutt.png")}
+            style={{ height: (height * 30) / 100, resizeMode: "contain" }}
+          />
+          <Form
+            ref="form"
+            type={LoginForm}
+            options={options}
+            value={this.state.value}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Login"
+            onPress={() => this.login()}
+            color={"#FF8C00"}
+          />
+        </View>
       </View>
     );
   }
@@ -144,11 +152,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff"
-  }
+  },
+  Field: {
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff"
+  },
+  button: {
+    backgroundColor: "#ffffff",
+    width: 250,
+  },
 });
 
 function mapStateToProps(state) {
-  console.log(state.userReducers.login);
   const { userReducers } = state;
   return {
     loginData: userReducers.login

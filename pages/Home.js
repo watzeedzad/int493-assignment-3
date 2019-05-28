@@ -57,11 +57,6 @@ class Home extends Component {
           });
         }}
       >
-        {/* <Card style={styles.navCardItem} elevation={10}>
-          <Text style={{ fontSize: 18, opacity: 1 }}>
-            {item.restaurantTypeDesc}
-          </Text>
-        </Card> */}
         <View style={styles.navCardItem}>
           <Text style={{ fontSize: 18, opacity: 1, color: "black" }}>
             {item.restaurantTypeDesc}

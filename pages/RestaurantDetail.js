@@ -7,7 +7,8 @@ import {
   Image,
   Button,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import RestaurantMap from "../components/Restaurant/RestaurantMap";
 import { Actions } from "react-native-router-flux";
@@ -26,6 +27,18 @@ class RestaurantDetail extends Component {
   componentWillUnmount = () => {
     this.focusListener.remove();
   };
+
+  onPressEditRestaurant = async () => {
+    let token = await AsyncStorage.getItem("token")
+    if (token == null) {
+      alert('Please login before edit restaurant.')
+      Actions.Login({});
+    } else {
+      Actions.AddRestaurant({
+        restaurant: this.props.restaurant.data[0]
+      });
+    }
+  }
 
   render() {
     const {
@@ -98,11 +111,7 @@ class RestaurantDetail extends Component {
             <View style={styles.button}>
               <Button
                 title="Edit Restaurant"
-                onPress={() => {
-                  Actions.AddRestaurant({
-                    restaurant: this.props.restaurant.data[0]
-                  });
-                }}
+                onPress={() => this.onPressEditRestaurant()}
                 color={"#FF8C00"}
               />
             </View>

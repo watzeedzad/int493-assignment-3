@@ -185,7 +185,7 @@ class AddReview extends Component {
               {this.state.photos.map((item, i) => this.renderImage(item, i))}
             </ScrollView>
           </Card>
-          <Button title="Add Review" onPress={() => this._addReview()} />
+          <Button title="Add Review" color={"#FF8C00"} onPress={() => this._addReview()} />
         </View>
       </ScrollView>
     );

@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 
@@ -20,8 +21,14 @@ class AddRestaurant extends Component {
     this.state = {};
   }
 
-  addRestaurant = () => {
-    Actions.AddRestaurant({})
+  addRestaurant = async () => {
+    let token = await AsyncStorage.getItem("token")
+    if (token == null) {
+      alert('Please login before add restant.')
+      Actions.Login({});
+    } else {
+      Actions.AddRestaurant({})
+    }
   };
 
   render() {

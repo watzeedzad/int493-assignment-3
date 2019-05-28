@@ -88,14 +88,6 @@ class Search extends Component {
             renderItem={this._restaurantListRenderItem}
             keyExtractor={this._restaurantListKeyExtractor}
           />
-          {/* <Card style={styles.card} elevation={3}>
-            <TouchableOpacity>
-              <Image
-                style={{ width: 150, height: 150, margin:10 }}
-                source={{ uri: 'https://www.iconsdb.com/icons/preview/orange/add-xxl.png' }}
-              />
-            </TouchableOpacity>
-          </Card> */}
           <AddRestaurant />
         </ScrollView>
       </View>

@@ -219,7 +219,7 @@ class AddRestaurant extends Component {
 
   _editRestaurant = () => {
     const item = this.state.value
-    console.log("item edit:",item)
+    console.log("item edit:", item)
     if (item == null) {
       alert('Please enter your information.')
     } else {
@@ -237,9 +237,9 @@ class AddRestaurant extends Component {
 
   renderButton = () => {
     if (this.state.value.restaurantId != null) {
-      return (<Button style={{ height: 36 }} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
+      return (<Button style={{ height: 36 }} color={"#FF8C00"} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
     } else {
-      return (<Button style={{ height: 36 }} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
+      return (<Button style={{ height: 36 }} color={"#FF8C00"} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
     }
   }
 
@@ -274,7 +274,9 @@ class AddRestaurant extends Component {
             onChange={(value) => this.setState({ value })}
             value={this.state.value}
           />
-          <RestaurantMap setAddress={this._setAddress}/>
+          <RestaurantMap setAddress={this._setAddress} />
+        </View>
+        <View style={styles.button}>
           {this.renderButton()}
         </View>
       </ScrollView>
@@ -290,7 +292,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff"
-  }
+  },
+  button: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    padding: 20
+  },
 });
 
 function mapStateToProps(state) {
