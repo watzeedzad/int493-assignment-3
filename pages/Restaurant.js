@@ -28,16 +28,13 @@ class Restaurant extends Component {
   componentWillMount = () => {
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.props.loadRestaurant(this.props.restaurantId);
+      this.props.loadReviews(this.props.restaurantId);
     });
   };
 
   componentWillUnmount = () => {
     this.focusListener.remove();
   };
-
-  componentDidMount() {
-    this.props.loadReviews(this.props.restaurantId);
-  }
 
   render() {
     const { reviews, restaurant } = this.props;

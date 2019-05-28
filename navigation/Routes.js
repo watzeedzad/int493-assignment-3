@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { Image, View, Dimensions } from "react-native";
 import { Router, Scene } from "react-native-router-flux";
 import LoginPage from "../pages/Login";
-import RegisterPage from "../pages/Restaurant";
 import EditUserPage from "../pages/EditUser";
 import HomePage from "../pages/Home";
 import RestaurantPage from "../pages/Restaurant";
@@ -41,7 +40,6 @@ class Routes extends Component {
             />
           </Scene>
           <Scene key="Login" component={LoginPage} />
-          <Scene key="Register" component={RegisterPage} />
           <Scene key="EditUser" component={EditUserPage} />
           <Scene key="Restaurant" component={RestaurantPage} />
           <Scene key="RestaurantDetail" component={RestaurantDetailPage} />

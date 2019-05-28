@@ -237,9 +237,9 @@ class AddRestaurant extends Component {
 
   renderButton = () => {
     if (this.state.value.restaurantId != null) {
-      return (<Button style={{ height: 36 }} color={"#FF8C00"} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
+      return (<Button color={"#FF8C00"} title="Edit Restaurant" onPress={() => this._editRestaurant()} />)
     } else {
-      return (<Button style={{ height: 36 }} color={"#FF8C00"} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
+      return (<Button color={"#FF8C00"} title="Add Restaurant" onPress={() => this._addRestaurant()} />)
     }
   }
 

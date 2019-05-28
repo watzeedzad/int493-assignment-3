@@ -227,6 +227,13 @@ router.put("/editUser", requireJWTAuth, (req, res, next) => {
 router.put("/editUser", uploadToS3.single("profilePicture"), (req, res) => {
   let { email, firstname, lastname, tel } = req.body;
   let userId = req.user.userId;
+  let userPicturePath;
+
+  if (typeof req.file === "undefined") {
+    userPicturePath = null;
+  } else {
+    userPicturePath = req.file.location;
+  }
 
   if (
     typeof email === "undefined" ||
@@ -247,6 +254,7 @@ router.put("/editUser", uploadToS3.single("profilePicture"), (req, res) => {
     firstname,
     lastname,
     tel,
+    userPicturePath,
     (editUserStatus, editUserResultData) => {
       if (editUserStatus) {
         res.status(500).send({
@@ -254,24 +262,29 @@ router.put("/editUser", uploadToS3.single("profilePicture"), (req, res) => {
           message: "error occur while update user info"
         });
       } else {
-        res.status(200).send({
-          error: false,
-          userData: {
-            userId: editUserResultData.userId,
+        const jwtToken = jwt.encode(
+          {
+            sub: editUserResultData.userId,
             username: editUserResultData.username,
             email: editUserResultData.email,
             firstname: editUserResultData.firstname,
             lastname: editUserResultData.lastname,
             tel: editUserResultData.tel,
-            userPicturePath: editUserResultData.userPicturePath
-          }
+            userPicturePath: editUserResultData.userPicturePath,
+            iat: new Date().getTime()
+          },
+          process.env.JWT_SECRET
+        );
+        res.status(200).send({
+          error: false,
+          token: "bearer " + jwtToken
         });
       }
     }
   );
 });
 
-async function editUser(userId, email, firstname, lastname, tel, callback) {
+async function editUser(userId, email, firstname, lastname, tel, userPicturePath, callback) {
   try {
     await user.findOneAndUpdate(
       {
@@ -282,7 +295,8 @@ async function editUser(userId, email, firstname, lastname, tel, callback) {
           email: email,
           firstname: firstname,
           lastname: lastname,
-          tel: tel
+          tel: tel,
+          userPicturePath: userPicturePath
         }
       },
       { new: true },

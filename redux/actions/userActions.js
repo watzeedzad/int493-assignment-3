@@ -96,3 +96,55 @@ export const register = (uri, item) => {
     })
   };
 };
+
+export const editUser = (uri, item) => {
+  let fileType
+  let uriParts
+  if (uri) {
+    uriParts = uri.split('.');
+    fileType = uriParts[uriParts.length - 1];
+  }
+
+  const formData = new FormData();
+  if (uri) {
+    formData.append('profilePicture', {
+      uri,
+      name: `profilePicture.${fileType}`,
+      type: `image/${fileType}`,
+    });
+  }else{
+    formData.append('profilePicture', null);
+  }
+  formData.append('userId', item.userId);
+  formData.append('email', item.email);
+  formData.append('firstname', item.firstname);
+  formData.append('lastname', item.lastname);
+  formData.append('tel', item.tel);
+
+  return async dispatch => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/user/editUser`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        'authorization': await AsyncStorage.getItem("token")
+      },
+      withCredentials: true
+    }).then(async results => {
+      if (results.data.error) {
+        dispatch({ type: 'EDIT_USER_REJECTED', payload: results.data.errorMessage })
+      } else {
+        await AsyncStorage.setItem("token", results.data.token).then(() => {
+          Actions.pop();
+          alert('Edit success.')
+          dispatch({ type: 'EDIT_USER_SUCCESS' })
+        });
+      }
+    }).catch(err => {
+      dispatch({ type: 'EDIT_USER_REJECTED', payload: err.message })
+    })
+  };
+};
+
+

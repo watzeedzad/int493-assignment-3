@@ -104,7 +104,7 @@ export const addRestaurant = (uri, item) => {
           dispatch({ type: 'ADD_RESTAURANT_REJECTED', payload: results.data.message })
         } else {
           alert('Add restaurant success.')
-          Actions.pop();
+          Actions.Home();
           dispatch({ type: 'ADD_RESTAURANT_SUCCESS' })
         }
       }).catch(err => {

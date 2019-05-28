@@ -6,9 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator
-} from "react-native"; import { AsyncStorage } from "react-native";
+} from "react-native";
 import { Avatar } from "react-native-elements";
-import jwt_decode from 'jwt-decode'
 import { Actions } from "react-native-router-flux";
 import BackHeader from "../components/Utils/BackHeader";
 
@@ -23,15 +22,9 @@ class UserProfile extends Component {
   }
 
   componentDidMount = () => {
-    this.loadUserInfo()
+    this.setState({user: this.props.user})
   }
-
-  loadUserInfo = async () => {
-    let token = await AsyncStorage.getItem("token")
-    let decoded = jwt_decode(token)
-    this.setState({ user: decoded })
-    console.log(this.state.user)
-  }
+  
   render() {
     const { user } = this.state
 

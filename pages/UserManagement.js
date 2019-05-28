@@ -55,6 +55,7 @@ export class UserManagement extends Component {
           ]
         });
       } else {
+        console.log(jwtDecode(token))
         this.setState({
           token: jwtDecode(token),
           menuItem: [
@@ -62,13 +63,13 @@ export class UserManagement extends Component {
               id: 0,
               iconImage: require("../assets/utils/User_icon.png"),
               text: "User Profile",
-              onPress: () => Actions.UserProfile()
+              onPress: () => Actions.UserProfile({user:this.state.token})
             },
             {
               id: 1,
               iconImage: require("../assets/utils/Edit_icon.png"),
               text: "Edit User",
-              onPress: () => Actions.EditUser()
+              onPress: () => Actions.EditUser({user:this.state.token})
             },
             {
               id: 2,
