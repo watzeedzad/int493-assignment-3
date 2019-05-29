@@ -13,7 +13,8 @@ const Form = t.form.Form;
 const { width, height } = Dimensions.get("screen");
 
 const Email = t.refinement(t.String, email => {
-  const reg = /[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  // const reg = /[a-z0-9!#$%&'+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return reg.test(email);
 });
 
@@ -186,7 +187,7 @@ class EditUser extends Component {
           error: "Lastname can not empty."
         },
         tel: {
-          error: "Tel is invalid. (ex. 012-3456789)"
+          error: "Tel is invalid. (ex. 0800000000)"
         }
       },
       stylesheet: formStyles
